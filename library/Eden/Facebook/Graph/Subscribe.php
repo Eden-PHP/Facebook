@@ -11,7 +11,7 @@
 
 namespace Eden\Facebook\Graph;
 
-use Eden\Facebook\Base;
+use Eden\Facebook\Base as FacebookBase;
 use Eden\Utility\Curl;
 
 /**
@@ -22,7 +22,7 @@ use Eden\Utility\Curl;
  * @author  Christian Symon M. Buenavista <sbuenavista@openovate.com>
  * @since   1.0.0
  */
-class Subscribe extends Base
+class Subscribe extends FacebookBase
 {
     const SUBSCRIBE_URL = 'https://graph.facebook.com/%s/subscriptions';
     const APPLICATION_URL = 'https://graph.facebook.com/oauth/access_token?client_id=%s&client_secret=%s&grant_type=%s';
@@ -104,7 +104,6 @@ class Subscribe extends Base
         $token = array('access_token' => $this->token);
         $url = sprintf(self::SUBSCRIBE_URL, $this->appId) . '?' . http_build_query($token);
 
-        var_dump($url);
         return $this->post($url, $query);
     }
 

@@ -35,8 +35,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testAuth()
     {
-//        $class = eden('facebook')->auth('key', 'secret', 'http://localhost/');
-//        $this->assertInstanceOf('Eden\\Facebook\\Graph\\Auth', $class);
+        $class = eden('facebook')->auth('key', 'secret', 'http://localhost:8080/');
+        $this->assertInstanceOf('Eden\\Facebook\\Auth', $class);
     }
 
     /**
@@ -45,7 +45,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testEvent()
     {
-        $class = eden('facebook')->event('token', 'name', 0, 0);
+        $class = eden('facebook')->event('token', 'name', '2014-10-12');
         $this->assertInstanceOf('Eden\\Facebook\\Graph\\Event', $class);
     }
 
@@ -106,7 +106,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSubscribe()
     {
-        $class = eden('facebook')->subscribe('206915732766089', 'e1d0c383066dd0d3fab35ec9436130cb');
+        $class = eden('facebook')->subscribe('208640612627477', 'e5aeaa7cd6b2e40b88a24f202b3463c7');
         $this->assertInstanceOf('Eden\\Facebook\\Graph\\Subscribe', $class);
     }
 }

@@ -17,6 +17,7 @@ class SearchTest extends PHPUnit_Framework_TestCase
      * @var Search
      */
     protected $token;
+    protected $appId;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -24,10 +25,10 @@ class SearchTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $appId = '206915732766089';
-        $secret = 'e1d0c383066dd0d3fab35ec9436130cb';
-        $redirect = 'http://localhost:8080';
-        $this->token = eden('facebook')->auth($appId, $secret, $redirect)
+        $this->appId = '208640612627477';
+        $secret = 'e5aeaa7cd6b2e40b88a24f202b3463c7';
+        $redirect = 'http://localhost:8080/';
+        $this->token = eden('facebook')->auth($this->appId, $secret, $redirect)
                 ->getAppToken();
     }
 
@@ -76,7 +77,7 @@ class SearchTest extends PHPUnit_Framework_TestCase
         $object = eden('facebook')->fql($this->token)
                 ->search()
                 ->setTable('application')
-                ->addFilter('app_id = 206915732766089')
+                ->addFilter('app_id = ' . $this->appId)
                 ->getCollection();
 
         $this->assertAttributeCount(1, 'list', $object);
@@ -91,10 +92,10 @@ class SearchTest extends PHPUnit_Framework_TestCase
         $object = eden('facebook')->fql($this->token)
                 ->search()
                 ->setTable('application')
-                ->addFilter('app_id = 206915732766089')
+                ->addFilter('app_id = ' . $this->appId)
                 ->getRows();
 
-        $this->assertEquals('ianmuninio@aim.com', $object[0]['contact_email']);
+        $this->assertEquals('edenunittesting@gmail.com', $object[0]['contact_email']);
     }
 
     /**
@@ -106,7 +107,7 @@ class SearchTest extends PHPUnit_Framework_TestCase
         $object = eden('facebook')->fql($this->token)
                 ->search()
                 ->setTable('application')
-                ->addFilter('app_id = 206915732766089')
+                ->addFilter('app_id = ' . $this->appId)
                 ->getTotal();
 
         $this->assertEquals(1, $object);
@@ -122,7 +123,7 @@ class SearchTest extends PHPUnit_Framework_TestCase
         $object = $fql
                 ->search()
                 ->setTable('application')
-                ->addFilter('app_id = 206915732766089')
+                ->addFilter('app_id = ' . $this->appId)
                 ->group('last');
 
         $this->assertAttributeSame($fql, 'database', $object);

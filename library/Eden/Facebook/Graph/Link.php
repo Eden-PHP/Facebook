@@ -11,11 +11,6 @@
 
 namespace Eden\Facebook\Graph;
 
-use Eden\Facebook\Auth;
-use Eden\Facebook\Base;
-use Eden\Facebook\Graph;
-use Eden\Utility\Curl;
-
 /**
  * Create Facebook link
  *
@@ -26,6 +21,7 @@ use Eden\Utility\Curl;
  */
 class Link extends Base
 {
+    const LINK = 'links';
     protected $token;
     protected $id = 'me';
     protected $post = array();
@@ -44,6 +40,8 @@ class Link extends Base
 
         $this->token = $token;
         $this->post = array('link' => $url);
+
+        parent::__construct($token, self::LINK);
     }
 
     /**
@@ -53,27 +51,7 @@ class Link extends Base
      */
     public function create()
     {
-        //get the facebook graph url
-        $url = Graph::GRAPH_URL . $this->id . '/links';
-        $query = array('access_token' => $this->token);
-        $url .= '?' . http_build_query($query);
-
-        //send it into curl
-        $response = Curl::i()
-                ->setUrl($url)          //sets the url
-                ->setConnectTimeout(10)        //sets connection timeout to 10 sec.
-                ->setFollowLocation(true)       //sets the follow location to true 
-                ->setTimeout(60)         //set page timeout to 60 sec
-                ->verifyPeer(false)         //verifying Peer must be boolean
-                ->setUserAgent(Auth::USER_AGENT)  //set facebook USER_AGENT
-                ->setHeaders('Expect')        //set headers to EXPECT
-                ->setPost(true)          //set post to true
-                ->setPostFields(http_build_query($this->post))  //set post fields
-                ->getJsonResponse();        //get the json response
-        if (array_key_exists('error', $response)) {
-            throw Argument::i($response['error']['message']);
-        }
-        return $response['id'];         //return the id
+        return parent::getResponse($this->id, $this->post);         //return the id
     }
 
     /**

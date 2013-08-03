@@ -17,6 +17,7 @@ class FqlTest extends \PHPUnit_Framework_TestCase
      * @var Fql
      */
     protected $token;
+    protected $appId;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -24,10 +25,10 @@ class FqlTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $appId = '206915732766089';
-        $secret = 'e1d0c383066dd0d3fab35ec9436130cb';
-        $redirect = 'http://localhost:8080';
-        $this->token = eden('facebook')->auth($appId, $secret, $redirect)
+        $this->appId = '208640612627477';
+        $secret = 'e5aeaa7cd6b2e40b88a24f202b3463c7';
+        $redirect = 'http://localhost:8080/';
+        $this->token = eden('facebook')->auth($this->appId, $secret, $redirect)
                 ->getAppToken();
     }
 
@@ -48,7 +49,7 @@ class FqlTest extends \PHPUnit_Framework_TestCase
     {
         $data = eden('facebook')
                 ->fql($this->token)
-                ->getCollection('application', array('app_id = 206915732766089'));
+                ->getCollection('application', array('app_id = ' . $this->appId));
 
         $this->assertAttributeCount(1, 'list', $data);
     }
@@ -61,7 +62,7 @@ class FqlTest extends \PHPUnit_Framework_TestCase
     {
         $class = eden('facebook')
                 ->fql($this->token);
-        $model = $class->getModel('application', 'app_id', '206915732766089');
+        $model = $class->getModel('application', 'app_id', $this->appId);
 
         $this->assertAttributeContains('contact_email', 'data', $model);
     }
@@ -74,9 +75,9 @@ class FqlTest extends \PHPUnit_Framework_TestCase
     {
         $data = eden('facebook')
                 ->fql($this->token)
-                ->getRow('application', 'app_id', '206915732766089');
+                ->getRow('application', 'app_id', $this->appId);
 
-        $this->assertEquals('ianmuninio@aim.com', $data['contact_email']);
+        $this->assertEquals('edenunittesting@gmail.com', $data['contact_email']);
     }
 
     /**
@@ -87,9 +88,9 @@ class FqlTest extends \PHPUnit_Framework_TestCase
     {
         $data = eden('facebook')
                 ->fql($this->token)
-                ->getRows('application', array('app_id = 206915732766089'));
+                ->getRows('application', array('app_id = ' . $this->appId));
 
-        $this->assertEquals('ianmuninio@aim.com', $data[0]['contact_email']);
+        $this->assertEquals('edenunittesting@gmail.com', $data[0]['contact_email']);
     }
 
     /**
@@ -100,7 +101,7 @@ class FqlTest extends \PHPUnit_Framework_TestCase
     {
         $count = eden('facebook')
                 ->fql($this->token)
-                ->getRowsCount('application', array('app_id = 206915732766089'));
+                ->getRowsCount('application', array('app_id = ' . $this->appId));
 
         $this->assertEquals(1, $count);
     }

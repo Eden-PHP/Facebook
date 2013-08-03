@@ -72,7 +72,7 @@ class Factory extends Base
      * @param string|int
      * @return Event
      */
-    public function event($token, $name, $start, $end)
+    public function event($token, $name, $start, $end = null)
     {
         return Event::i($token, $name, $start, $end);
     }

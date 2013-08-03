@@ -11,11 +11,6 @@
 
 namespace Eden\Facebook\Graph;
 
-use Eden\Facebook\Auth;
-use Eden\Facebook\Base;
-use Eden\Facebook\Graph;
-use Eden\Utility\Curl;
-
 /**
  * Create Facebook Event
  *
@@ -26,6 +21,7 @@ use Eden\Utility\Curl;
  */
 class Event extends Base
 {
+    const EVENTS = 'events';
     const OPEN = 'OPEN';
     const CLOSED = 'CLOSED';
     const SECRET = 'SECRET';
@@ -42,27 +38,21 @@ class Event extends Base
      * @param type $start
      * @param type $end
      */
-    public function __construct($token, $name, $start, $end)
+    public function __construct($token, $name, $start, $end = null)
     {
         Argument::i()
                 ->test(1, 'string') // argument 1 must be a string
                 ->test(2, 'string') // argument 2 must be a string
-                ->test(3, 'string', 'int') // argument 3 must be a string or an integer
-                ->test(4, 'string', 'int'); // argument 4 must be a string or an integer
-
-        if (is_string($start)) {
-            $start = strtotime($start);
-        }
-
-        if (is_string($end)) {
-            $end = strtotime($end);
-        }
+                ->test(3, 'string') // argument 3 must be a string or an integer
+                ->test(4, 'string', 'null'); // argument 4 must be a string, an integer or a null
 
         $this->token = $token;
         $this->post = array(
             'name' => $name,
             'start_time' => $start,
             'end_time' => $end);
+
+        parent::__construct($token, self::EVENTS);
     }
 
     /**
@@ -79,25 +69,7 @@ class Event extends Base
             $post['venue'] = json_encode($this->venue);
         }
 
-        //get the facebook graph url
-        $url = Graph::GRAPH_URL . $this->id . '/events';
-        $query = array('access_token' => $this->token);
-        $url .= '?' . http_build_query($query);
-
-        //send it into curl
-        $response = Curl::i()
-                ->setUrl($url) // sets the url
-                ->setConnectTimeout(10) // sets connection timeout to 10 sec.
-                ->setFollowLocation(true) // sets the follow location to true 
-                ->setTimeout(60) // set page timeout to 60 sec
-                ->verifyPeer(false) // verifying Peer must be boolean
-                ->setUserAgent(Auth::USER_AGENT) // set facebook USER_AGENT
-                ->setHeaders('Expect') // set headers to EXPECT
-                ->setPost(true) // set post to true
-                ->setPostFields(http_build_query($post)) // set post fields
-                ->getJsonResponse(); // get the json response
-
-        return $response['id']; //return the id
+        return $this->getResponse($this->id, $post);
     }
 
     /**
@@ -160,9 +132,15 @@ class Event extends Base
         return $this;
     }
 
+    /**
+     * Profile Id
+     * 
+     * @param type $id
+     * @return \Eden\Facebook\Graph\Event
+     */
     public function setId($id)
     {
-        Argument::i()->test(1, 'numeric'); // argument 1 must be a numeric
+        Argument::i()->test(1, 'string', 'numeric'); // argument 1 must be a string or a numeric
 
         $this->id = $id;
         return $this;

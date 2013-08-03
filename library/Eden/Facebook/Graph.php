@@ -23,8 +23,8 @@ use Eden\Utility\Curl;
  *
  * @vendor  Eden
  * @package Eden\Facebook
- * @author  Christian Blanquera <cblanquera@openovate.com>
- * @since   1.0.0
+ * @author  Ian Mark Muninio <ianmuninio@openovate.com>
+ * @since   3.0.0
  */
 class Graph extends Base
 {
@@ -77,6 +77,25 @@ class Graph extends Base
     }
 
     /**
+     * Delete a facebook object
+     * 
+     * @param string $id object id
+     * @return mixed reponse of the server
+     */
+    public function delete($id)
+    {
+        Argument::i()
+                ->test(1, 'string'); // argument 1 must be a string
+        //
+        //get the facebook graph url
+        $url = Graph::GRAPH_URL . $id;
+        $query = array('access_token' => $this->token);
+        $url .= '?' . http_build_query($query);
+
+        return $this->getResponse($url, array(), Curl::DELETE);         //return the id
+    }
+
+    /**
      * Add an album
      *
      * @param string|int the object ID to place the album
@@ -96,9 +115,8 @@ class Graph extends Base
         $post = array('name' => $name, 'message' => $message);
         $query = array('access_token' => $this->token);
         $url .= '?' . http_build_query($query);
-        $results = json_decode($this->getCurlResponse($url, $post), true);
 
-        return $results['id'];
+        return $this->getResponse($url, $post)['id'];
     }
 
     /**
@@ -112,91 +130,21 @@ class Graph extends Base
     {
         //GraphArgument test
         GraphArgument::i()
-                ->test(1, 'int') // argument 1 must be an integer
+                ->test(1, 'string') // argument 1 must be an string
                 ->test(2, 'string'); // argument 2 must be a string
         //form the URL	
         $url = self::GRAPH_URL . $id . '/comments';
         $post = array('message' => $message);
         $query = array('access_token' => $this->token);
         $url .= '?' . http_build_query($query);
-        $results = json_decode($this->getCurlResponse($url, $post), true);
+        $results = $this->getResponse($url, $post);
 
-        return $results['id'];
-    }
-
-    /**
-     * Attend an event
-     *
-     * @param int the event ID
-     * @return this
-     */
-    public function attendEvent($id)
-    {
-        GraphArgument::i()->test(1, 'int');
-
-        $url = self::GRAPH_URL . $id . '/attending';
-        $query = array('access_token' => $this->token);
-        $url .= '?' . http_build_query($query);
-
-        json_decode($this->getCurlResponse($url), true);
-
-        return $this;
-    }
-
-    /**
-     * Check into a place
-     *
-     * @param string|int the checkin ID
-     * @param string 
-     * @param float
-     * @param float
-     * @param int the place ID
-     * @param string|array
-     * @return int
-     */
-    public function checkin($id, $message, $latitude, $longitude, $place, $tags)
-    {
-        //GraphArgument test
-        GraphArgument::i()
-                ->test(1, 'string', 'int') // argument 1 must be a string or integer
-                ->test(2, 'string') // argument 2 must be a string
-                ->test(3, 'float') // argument 3 must be a float
-                ->test(4, 'float') //GraphArgument 4 must be a float
-                ->test(5, 'int') //GraphArgument 5 must be a integer
-                ->test(6, 'string', 'array'); // argument 6 must be a string or an array
-
-        $url = self::GRAPH_URL . $id . '/checkins';
-        $post = array('message' => $message);
-        $query = array('access_token' => $this->token);
-        $url .= '?' . http_build_query($query);
-
-        //if message
-        if ($message) {
-            //add it
-            $post['message'] = $message;
+        if (isset($results['error']['message'])) {
+            Exception::i()
+                    ->setMessage($results['error']['message'])
+                    ->trigger();
         }
 
-        //if coords
-        if ($latitude && $longitute) {
-            //add it
-            $post['coordinates'] = json_encode(array(
-                'latitude' => $latitude,
-                'longitude' => $longitude));
-        }
-
-        //if place
-        if ($place) {
-            //add it
-            $post['place'] = $place;
-        }
-
-        //if tags
-        if ($tags) {
-            //add it
-            $post['tags'] = $tags;
-        }
-
-        $results = json_decode($this->getCurlResponse($url, $post), true);
         return $results['id'];
     }
 
@@ -219,27 +167,10 @@ class Graph extends Base
         $post = array('subject' => $subject, 'message' => $message);
         $query = array('access_token' => $this->token);
         $url .= '?' . http_build_query($query);
-        $results = json_decode($this->getCurlResponse($url, $post), true);
+        $results = $this->getResponse($url, $post);
+        ;
 
         return $results['id'];
-    }
-
-    /**
-     * Decline an event
-     *
-     * @param int event ID
-     * @return this
-     */
-    public function declineEvent($id)
-    {
-        GraphArgument::i()->test(1, 'int'); // argument 1 must be a inteeger
-        $url = self::GRAPH_URL . $id . '/declined';
-        $query = array('access_token' => $this->token);
-        $url .= '?' . http_build_query($query);
-
-        json_decode($this->getCurlResponse($url), true);
-
-        return $this;
     }
 
     /**
@@ -250,7 +181,7 @@ class Graph extends Base
      * @param string|int string date or time format
      * @return Event
      */
-    public function event($name, $start, $end)
+    public function event($name, $start, $end = null)
     {
         return Event::i($this->token, $name, $start, $end);
     }
@@ -328,19 +259,7 @@ class Graph extends Base
         }
 
         //call it
-        $object = $this->getCurlResponse($url);
-        $object = json_decode($object, true);
-
-        //if there is an error
-        if (isset($object['error'])) {
-            //throw it
-            GraphArgument::i()
-                    ->setMessage(GraphArgument::GRAPH_FAILED)
-                    ->addVariable($url)
-                    ->addVariable($object['error']['type'])
-                    ->addVariable($object['error']['message'])
-                    ->trigger();
-        }
+        $object = $this->getResponse($url, array(), Curl::GET);
 
         return $object;
     }
@@ -355,6 +274,7 @@ class Graph extends Base
     {
         GraphArgument::i()->test(1, 'string', 'int'); // argument 1 must be a string or an integer
         $permissions = $this->getObject($id, 'permissions');
+
         return $permissions['data'];
     }
 
@@ -397,7 +317,7 @@ class Graph extends Base
      * Like an object
      *
      * @param int|string object ID
-     * @return array
+     * @return id
      */
     public function like($id)
     {
@@ -406,8 +326,27 @@ class Graph extends Base
         $query = array('access_token' => $this->token);
         $url .= '?' . http_build_query($query);
 
-        $this->getCurlResponse($url);
-        return $this;
+        $reponse = $this->getResponse($url);
+
+        return $reponse;
+    }
+
+    /**
+     * Unlike an object
+     * 
+     * @param int|string $id
+     * @return id
+     */
+    public function unlike($id)
+    {
+        GraphArgument::i()->test(1, 'string', 'int');
+        $url = self::GRAPH_URL . $id . '/likes';
+        $query = array('access_token' => $this->token);
+        $url .= '?' . http_build_query($query);
+
+        $reponse = $this->getResponse($url, array(), Curl::DELETE);
+
+        return $reponse;
     }
 
     /**
@@ -419,6 +358,43 @@ class Graph extends Base
     public function link($url)
     {
         return Link::i($this->token, $url);
+    }
+
+    /**
+     * Attend an event
+     *
+     * @param int the event ID
+     * @return bool
+     */
+    public function attendEvent($id)
+    {
+        GraphArgument::i()->test(1, 'int');
+
+        $url = self::GRAPH_URL . $id . '/attending';
+        $query = array('access_token' => $this->token);
+        $url .= '?' . http_build_query($query);
+
+        $reponse = $this->getResponse($url);
+
+        return $reponse;
+    }
+
+    /**
+     * Decline an event
+     *
+     * @param int event ID
+     * @return bool
+     */
+    public function declineEvent($id)
+    {
+        GraphArgument::i()->test(1, 'int'); // argument 1 must be a inteeger
+        $url = self::GRAPH_URL . $id . '/declined';
+        $query = array('access_token' => $this->token);
+        $url .= '?' . http_build_query($query);
+
+        $reponse = $this->getResponse($url);
+
+        return $reponse;
     }
 
     /**
@@ -435,9 +411,9 @@ class Graph extends Base
         $query = array('access_token' => $this->token);
         $url .= '?' . http_build_query($query);
 
-        json_decode($this->getCurlResponse($url), true);
+        $reponse = $this->getResponse($url);
 
-        return $this;
+        return $reponse;
     }
 
     /**
@@ -467,9 +443,12 @@ class Graph extends Base
                 ->test(3, 'string', 'null'); // argument 3 must be a string or null
         //form the URL
         $url = self::GRAPH_URL . $albumId . '/photos';
-        $post = array('source' => '@' . $file);
+        $post = array('source' => $file);
         $query = array('access_token' => $this->token);
+        $post['scope'] = 'publish_stream';
 
+        var_dump(http_build_query($post));
+        
         //if there is a message
         if ($message) {
             $post['message'] = $message;
@@ -478,43 +457,55 @@ class Graph extends Base
         $url .= '?' . http_build_query($query);
 
         //send it off
-        $results = Curl::i()
+        $results = $this->getResponse($url, $post);
+
+        return $results;
+    }
+
+    /**
+     * Get response using curl
+     * 
+     * @param type $url
+     * @param array $post
+     * @param type $request
+     * @return type
+     */
+    protected function getResponse($url, array $post = array(), $request = 'POST')
+    {
+        //send it off
+        $curl = Curl::i()
                 ->setUrl($url)
                 ->setConnectTimeout(10)
                 ->setFollowLocation(true)
                 ->setTimeout(60)
                 ->verifyPeer(false)
                 ->setUserAgent(Auth::USER_AGENT)
-                ->setHeaders('Expect')
-                ->when(!empty($post), 2)
-                ->setPost(true)
-                ->setPostFields($post)
-                ->getJsonResponse();
+                ->setHeaders('Expect');
 
-        return $results['id'];
-    }
+        switch ($request) {
+            case 'PUT':
+                $curl->setCustomPut();
+                break;
+            case 'GET':
+                $curl->setCustomGet();
+                break;
+            case 'DELETE':
+                $curl->setCustomDelete();
+                break;
+            default:
+                $curl->setPost(true)
+                        ->setPostFields(http_build_query($post));
+        }
 
-    /**
-     * Gets the response of the curl
-     * 
-     * @param type $url
-     * @param array $post
-     * @return type
-     */
-    protected function getCurlResponse($url, array $post = array())
-    {
-        return Curl::i()
-                        ->setUrl($url)
-                        ->setConnectTimeout(10)
-                        ->setFollowLocation(true)
-                        ->setTimeout(60)
-                        ->verifyPeer(false)
-                        ->setUserAgent(Auth::USER_AGENT)
-                        ->setHeaders('Expect')
-                        ->when(!empty($post), 2)
-                        ->setPost(true)
-                        ->setPostFields(http_build_query($post))
-                        ->getResponse();
+        $response = $curl->getJsonResponse();
+
+        if (isset($response['error']['message'])) {
+            Exception::i()
+                    ->setMessage($response['error']['message'])
+                    ->trigger();
+        }
+
+        return $response;
     }
 
     /**
