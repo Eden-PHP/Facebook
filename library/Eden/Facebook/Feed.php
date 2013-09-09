@@ -44,13 +44,13 @@ class Feed extends Base
     public function getRss()
     {
         return Curl::i()
-                        ->setUrl(sprintf(self::FEED_URL, $this->id, self::RSS_FORMAT))
-                        ->setUserAgent(self::USER_AGENT)
-                        ->setConnectTimeout(10)
-                        ->setFollowLocation(true)
-                        ->setTimeout(60)
-                        ->verifyPeer(false)
-                        ->getSimpleXmlResponse();
+			->setUrl(sprintf(self::FEED_URL, $this->id, self::RSS_FORMAT))
+			->setUserAgent(self::USER_AGENT)
+			->setConnectTimeout(10)
+			->setFollowLocation(true)
+			->setTimeout(60)
+			->verifyPeer(false)
+			->getSimpleXmlResponse();
     }
 
     /**
@@ -62,12 +62,12 @@ class Feed extends Base
     public function getJson()
     {
         return Curl::i()
-                        ->setUrl(sprintf(self::FEED_URL, $this->id, self::JSON_FORMAT))
-                        ->setUserAgent(self::USER_AGENT)
-                        ->setConnectTimeout(10)
-                        ->setFollowLocation(true)
-                        ->setTimeout(60)
-                        ->verifyPeer(false)
-                        ->getJsonResponse();
+			->setUrl(sprintf(self::FEED_URL, $this->id, self::JSON_FORMAT))
+			->setUserAgent(self::USER_AGENT)
+			->setConnectTimeout(10)
+			->setFollowLocation(true)
+			->setTimeout(60)
+			->verifyPeer(false)
+			->getJsonResponse();
     }
 }

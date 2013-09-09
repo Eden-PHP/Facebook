@@ -11,7 +11,6 @@
 
 namespace Eden\Facebook;
 
-use Eden\Facebook\Fql\Fql;
 use Eden\Facebook\Graph\Event;
 use Eden\Facebook\Graph\Link;
 use Eden\Facebook\Graph\Post;
@@ -31,7 +30,6 @@ use Eden\Facebook\Graph\Subscribe;
  */
 class Factory extends Base
 {
-
     /**
      * Returns Facebook Auth
      *

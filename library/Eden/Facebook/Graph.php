@@ -12,7 +12,6 @@
 namespace Eden\Facebook;
 
 use Eden\Facebook\Base;
-use Eden\Facebook\Graph\Argument as GraphArgument;
 use Eden\Facebook\Graph\Event;
 use Eden\Facebook\Graph\Link;
 use Eden\Facebook\Graph\Post;
@@ -35,7 +34,7 @@ class Graph extends Base
     /**
      * Preloads the token
      * 
-     * @param type $token
+     * @param string
      */
     public function __construct($token)
     {
@@ -43,11 +42,11 @@ class Graph extends Base
     }
 
     /**
-     * Magic metthod of __call
+     * Magic method of __call
      * 
-     * @param type $name
-     * @param type $args
-     * @return type
+     * @param string
+     * @param array
+     * @return mixed
      */
     public function __call($name, $args)
     {
@@ -66,7 +65,6 @@ class Graph extends Base
 
             return call_user_func_array(array($this, 'getDataList'), $args);
         } else if (strpos($name, 'search') === 0 && in_array(substr($name, 6), $this->_search)) {
-
             //get rid of get
             $key = strtolower(substr($name, 6));
 
@@ -92,7 +90,7 @@ class Graph extends Base
         $query = array('access_token' => $this->token);
         $url .= '?' . http_build_query($query);
 
-        return $this->getResponse($url, array(), Curl::DELETE);         //return the id
+        return $this->getResponse($url, array(), Curl::DELETE);        
     }
 
     /**
@@ -105,18 +103,21 @@ class Graph extends Base
      */
     public function addAlbum($id, $name, $message)
     {
-        //GraphArgument test
-        GraphArgument::i()
-                ->test(1, 'string', 'int') // argument 1 must be a string or integer
-                ->test(2, 'string') // argument 2 must be a string
-                ->test(3, 'string'); // argument 3 must be a string
+        //Argument test
+        Argument::i()
+			->test(1, 'string', 'int') // argument 1 must be a string or integer
+			->test(2, 'string') // argument 2 must be a string
+			->test(3, 'string'); // argument 3 must be a string
+				
         //form the URL
         $url = self::GRAPH_URL . $id . '/albums';
         $post = array('name' => $name, 'message' => $message);
         $query = array('access_token' => $this->token);
         $url .= '?' . http_build_query($query);
 
-        return $this->getResponse($url, $post)['id'];
+        $response = $this->getResponse($url, $post);
+		
+		return $response['id'];
     }
 
     /**
@@ -128,10 +129,11 @@ class Graph extends Base
      */
     public function addComment($id, $message)
     {
-        //GraphArgument test
-        GraphArgument::i()
-                ->test(1, 'string') // argument 1 must be an string
-                ->test(2, 'string'); // argument 2 must be a string
+        //Argument test
+        Argument::i()
+			->test(1, 'string') // argument 1 must be an string
+			->test(2, 'string'); // argument 2 must be a string
+		
         //form the URL	
         $url = self::GRAPH_URL . $id . '/comments';
         $post = array('message' => $message);
@@ -141,8 +143,8 @@ class Graph extends Base
 
         if (isset($results['error']['message'])) {
             Exception::i()
-                    ->setMessage($results['error']['message'])
-                    ->trigger();
+				->setMessage($results['error']['message'])
+				->trigger();
         }
 
         return $results['id'];
@@ -158,17 +160,17 @@ class Graph extends Base
      */
     public function createNote($id = 'me', $subject, $message)
     {
-        GraphArgument::i()
-                ->test(1, 'string', 'int') // argument 1 must be a string or integer
-                ->test(2, 'string') // argument 2 must be a string
-                ->test(3, 'string'); // argument 3 must be a string
+        Argument::i()
+			->test(1, 'string', 'int') // argument 1 must be a string or integer
+			->test(2, 'string') // argument 2 must be a string
+			->test(3, 'string'); // argument 3 must be a string
+		
         //form the URL	
         $url = self::GRAPH_URL . $id . '/notes';
         $post = array('subject' => $subject, 'message' => $message);
         $query = array('access_token' => $this->token);
         $url .= '?' . http_build_query($query);
         $results = $this->getResponse($url, $post);
-        ;
 
         return $results['id'];
     }
@@ -179,7 +181,7 @@ class Graph extends Base
      * @param string name of event
      * @param string|int string date or time format
      * @param string|int string date or time format
-     * @return Event
+     * @return Eden\Facebook\Graph\Event
      */
     public function event($name, $start, $end = null)
     {
@@ -195,8 +197,8 @@ class Graph extends Base
      */
     public function getFields($id = 'me', $fields)
     {
-        //GraphArgument test
-        GraphArgument::i()
+        //Argument test
+        Argument::i()
                 ->test(1, 'string', 'int') // argument 1 must be a string or int
                 ->test(2, 'string', 'array'); // argument 2 must be a string or array
         //if fields is an array	
@@ -217,7 +219,7 @@ class Graph extends Base
      */
     public function getLogoutUrl($redirect)
     {
-        GraphArgument::i()->test(1, 'url');
+        Argument::i()->test(1, 'url');
         return sprintf(self::LOGOUT_URL, urlencode($redirect), $this->token);
     }
 
@@ -232,11 +234,12 @@ class Graph extends Base
      */
     public function getObject($id = 'me', $connection = null, array $query = array(), $auth = true)
     {
-        GraphArgument::i()
-                ->test(1, 'string', 'int') // argument 1 must be a string or int
-                ->test(2, 'string', 'null') // argument 2 must be a string or null
-                ->test(3, 'array') // argument 3 must be an array
-                ->test(4, 'bool'); // argument 4 must be a boolean
+        Argument::i()
+			->test(1, 'string', 'int') // argument 1 must be a string or int
+			->test(2, 'string', 'null') // argument 2 must be a string or null
+			->test(3, 'array') // argument 3 must be an array
+			->test(4, 'bool'); // argument 4 must be a boolean
+			
         //if we have a connection	
         if ($connection) {
             //prepend a slash
@@ -272,7 +275,8 @@ class Graph extends Base
      */
     public function getPermissions($id = 'me')
     {
-        GraphArgument::i()->test(1, 'string', 'int'); // argument 1 must be a string or an integer
+		// argument 1 must be a string or an integer
+        Argument::i()->test(1, 'string', 'int'); 
         $permissions = $this->getObject($id, 'permissions');
 
         return $permissions['data'];
@@ -287,10 +291,11 @@ class Graph extends Base
      */
     public function getPictureUrl($id = 'me', $token = true)
     {
-        //GraphArgument test
-        GraphArgument::i()
-                ->test(1, 'string', 'int') // argument 1 must be a string or an integer
-                ->test(2, 'bool'); // argument 2 must be a boolean
+        //Argument test
+        Argument::i()
+			->test(1, 'string', 'int') // argument 1 must be a string or an integer
+			->test(2, 'bool'); // argument 2 must be a boolean
+		
         //for the URL	
         $url = self::GRAPH_URL . $id . '/picture';
 
@@ -317,43 +322,39 @@ class Graph extends Base
      * Like an object
      *
      * @param int|string object ID
-     * @return id
+     * @return array
      */
     public function like($id)
     {
-        GraphArgument::i()->test(1, 'string', 'int');
+        Argument::i()->test(1, 'string', 'int');
         $url = self::GRAPH_URL . $id . '/likes';
         $query = array('access_token' => $this->token);
         $url .= '?' . http_build_query($query);
 
-        $reponse = $this->getResponse($url);
-
-        return $reponse;
+        return $this->getResponse($url);
     }
 
     /**
      * Unlike an object
      * 
      * @param int|string $id
-     * @return id
+     * @return array
      */
     public function unlike($id)
     {
-        GraphArgument::i()->test(1, 'string', 'int');
+        Argument::i()->test(1, 'string', 'int');
         $url = self::GRAPH_URL . $id . '/likes';
         $query = array('access_token' => $this->token);
         $url .= '?' . http_build_query($query);
 
-        $reponse = $this->getResponse($url, array(), Curl::DELETE);
-
-        return $reponse;
+        return $this->getResponse($url, array(), Curl::DELETE);
     }
 
     /**
      * Add a link
      *
      * @param string
-     * @return Link
+     * @return Eden\Facebook\Graph\Link
      */
     public function link($url)
     {
@@ -364,63 +365,58 @@ class Graph extends Base
      * Attend an event
      *
      * @param int the event ID
-     * @return bool
+     * @return array
      */
     public function attendEvent($id)
     {
-        GraphArgument::i()->test(1, 'int');
+        Argument::i()->test(1, 'int');
 
         $url = self::GRAPH_URL . $id . '/attending';
         $query = array('access_token' => $this->token);
         $url .= '?' . http_build_query($query);
 
-        $reponse = $this->getResponse($url);
-
-        return $reponse;
+        return $this->getResponse($url);
     }
 
     /**
      * Decline an event
      *
      * @param int event ID
-     * @return bool
+     * @return array
      */
     public function declineEvent($id)
     {
-        GraphArgument::i()->test(1, 'int'); // argument 1 must be a inteeger
+		// argument 1 must be a inteeger
+        Argument::i()->test(1, 'int'); 
         $url = self::GRAPH_URL . $id . '/declined';
         $query = array('access_token' => $this->token);
         $url .= '?' . http_build_query($query);
 
-        $reponse = $this->getResponse($url);
-
-        return $reponse;
+        return $this->getResponse($url);
     }
 
     /**
      * Maybe an event
      *
      * @param int event ID
-     * @return this
+     * @return array
      */
     public function maybeEvent($id)
     {
-        GraphArgument::i()->test(1, 'int'); // argument 1 must be an integer
+        Argument::i()->test(1, 'int'); // argument 1 must be an integer
 
         $url = self::GRAPH_URL . $id . '/maybe';
         $query = array('access_token' => $this->token);
         $url .= '?' . http_build_query($query);
 
-        $reponse = $this->getResponse($url);
-
-        return $reponse;
+        return $this->getResponse($url);
     }
 
     /**
      * Returns Facebook Post
      *
      * @param string
-     * @return Post
+     * @return Eden\Facebook\Graph\Post
      */
     public function post($message)
     {
@@ -433,14 +429,15 @@ class Graph extends Base
      * @param int|string
      * @param string
      * @param string|null
-     * @return int photo ID
+     * @return array
      */
     public function uploadPhoto($albumId, $file, $message = null)
     {
-        GraphArgument::i()
-                ->test(1, 'string', 'int') // argument 1 must be a string or integer
-                ->test(2, 'file') // argument 2 must be a file
-                ->test(3, 'string', 'null'); // argument 3 must be a string or null
+        Argument::i()
+			->test(1, 'string', 'int') // argument 1 must be a string or integer
+			->test(2, 'file') // argument 2 must be a file
+			->test(3, 'string', 'null'); // argument 3 must be a string or null
+		
         //form the URL
         $url = self::GRAPH_URL . $albumId . '/photos';
         $post = array('source' => $file);
@@ -457,9 +454,7 @@ class Graph extends Base
         $url .= '?' . http_build_query($query);
 
         //send it off
-        $results = $this->getResponse($url, $post);
-
-        return $results;
+        return $this->getResponse($url, $post);
     }
 
     /**
@@ -474,13 +469,13 @@ class Graph extends Base
     {
         //send it off
         $curl = Curl::i()
-                ->setUrl($url)
-                ->setConnectTimeout(10)
-                ->setFollowLocation(true)
-                ->setTimeout(60)
-                ->verifyPeer(false)
-                ->setUserAgent(Auth::USER_AGENT)
-                ->setHeaders('Expect');
+			->setUrl($url)
+			->setConnectTimeout(10)
+			->setFollowLocation(true)
+			->setTimeout(60)
+			->verifyPeer(false)
+			->setUserAgent(Auth::USER_AGENT)
+			->setHeaders('Expect');
 
         switch ($request) {
             case 'PUT':
@@ -494,15 +489,15 @@ class Graph extends Base
                 break;
             default:
                 $curl->setPost(true)
-                        ->setPostFields(http_build_query($post));
+                    ->setPostFields(http_build_query($post));
         }
 
         $response = $curl->getJsonResponse();
 
         if (isset($response['error']['message'])) {
             Exception::i()
-                    ->setMessage($response['error']['message'])
-                    ->trigger();
+				->setMessage($response['error']['message'])
+				->trigger();
         }
 
         return $response;

@@ -50,13 +50,12 @@ class Select extends Base
      * From clause
      *
      * @param string from
-     * @return this
-     * @notes loads from phrase into registry
+     * @return Eden\Facebook\Fql\Select
      */
     public function from($from)
     {
-        Argument::i()
-                ->test(1, 'string'); // argument 1 must be a string
+		// argument 1 must be a string
+        Argument::i()->test(1, 'string'); 
 
         $this->from = $from;
         return $this;
@@ -67,8 +66,7 @@ class Select extends Base
      *
      * @param string|int page
      * @param string|int length
-     * @return this
-     * @notes loads page and length into registry
+     * @return Eden\Facebook\Fql\Select
      */
     public function limit($page, $length)
     {
@@ -87,7 +85,6 @@ class Select extends Base
      *
      * @param  bool
      * @return string
-     * @notes returns the query based on the registry
      */
     public function getQuery()
     {
@@ -102,7 +99,7 @@ class Select extends Base
         }
 
         $query = sprintf(
-                'SELECT %s FROM %s %s %s %s;', $this->select, $this->from, $where, $sort, $limit);
+            'SELECT %s FROM %s %s %s %s;', $this->select, $this->from, $where, $sort, $limit);
 
         return str_replace('  ', ' ', $query);
     }
@@ -111,13 +108,13 @@ class Select extends Base
      * Select clause
      *
      * @param string select
-     * @return this
-     * @notes loads select phrase into registry
+     * @return Eden\Facebook\Fql\Select
      */
     public function select($select = '*')
     {
-        Argument::i()
-                ->test(1, 'string', 'array'); // argument 1 must be a string or array
+		// argument 1 must be a string or array
+        Argument::i()->test(1, 'string', 'array'); 
+		
         //if select is an array
         if (is_array($select)) {
             //transform into a string
@@ -134,14 +131,13 @@ class Select extends Base
      *
      * @param string field
      * @param string order
-     * @return this
-     * @notes loads field and order into registry
+     * @return Eden\Facebook\Fql\Select
      */
     public function sortBy($field, $order = 'ASC')
     {
         Argument::i()
-                ->test(1, 'string') // argument 1 must be a string
-                ->test(2, 'string'); // argument 2 must be a string
+			->test(1, 'string') // argument 1 must be a string
+			->test(2, 'string'); // argument 2 must be a string
 
         $this->sortBy[] = $field . ' ' . $order;
 
@@ -152,13 +148,12 @@ class Select extends Base
      * Where clause
      *
      * @param array|string where
-     * @return	this
-     * @notes loads a where phrase into registry
+     * @return Eden\Facebook\Fql\Select
      */
     public function where($where)
     {
-        Argument::i()
-                ->test(1, 'string', 'array'); // argument 1 must be a string or array
+		// argument 1 must be a string or array
+        Argument::i()->test(1, 'string', 'array'); 
 
         if (is_string($where)) {
             $where = array($where);
@@ -168,31 +163,42 @@ class Select extends Base
 
         return $this;
     }
+	
     protected static $columns = array(
-        'album' => array('aid', 'backdated_time', 'can_backdate', 'can_upload', 'comment_info',
+        'album' => array(
+			'aid', 'backdated_time', 'can_backdate', 'can_upload', 'comment_info',
             'cover_object_id', 'cover_pid', 'created', 'description', 'edit_link',
             'is_user_facing', 'like_info', 'link', 'location', 'modified',
             'modified_major', 'name', 'object_id', 'owner', 'owner_cursor',
             'photo_count', 'place_id', 'type', 'video_count', 'visible'),
         'app_role' => array('application_id', 'developer_id', 'role'),
-        'application' => array('android_key_hash', 'api_key', 'app_domains', 'app_id', 'app_name',
-            'app_type', 'appcenter_icon_url', 'auth_dialog_data_help_url', 'auth_dialog_headline', 'auth_dialog_perms_explanation',
-            'auth_referral_default_activity_privacy', 'auth_referral_enabled', 'auth_referral_extended_perms', 'auth_referral_friend_perms', 'auth_referral_response_type',
-            'auth_referral_user_perms', 'canvas_fluid_height', 'canvas_fluid_width', 'canvas_url', 'category',
+        'application' => array(
+			'android_key_hash', 'api_key', 'app_domains', 'app_id', 'app_name',
+            'app_type', 'appcenter_icon_url', 'auth_dialog_data_help_url', 
+			'auth_dialog_headline', 'auth_dialog_perms_explanation',
+            'auth_referral_default_activity_privacy', 'auth_referral_enabled', 
+			'auth_referral_extended_perms', 'auth_referral_friend_perms', 
+			'auth_referral_response_type', 'auth_referral_user_perms', 
+			'canvas_fluid_height', 'canvas_fluid_width', 'canvas_url', 'category',
             'client_config', 'company_name', 'configured_ios_sso', 'contact_email', 'created_time',
             'creator_uid', 'daily_active_users', 'deauth_callback_url', 'description', 'developers',
             'display_name', 'hosting_url', 'icon_url', 'ios_bundle_id', 'ipad_app_store_id',
             'iphone_app_store_id', 'is_facebook_app', 'link', 'logo_url', 'migration_status',
-            'mobile_profile_section_url', 'mobile_web_url', 'monthly_active_users', 'namespace', 'page_tab_default_name',
-            'page_tab_url', 'privacy_policy_url', 'profile_section_url', 'restriction_info', 'secure_canvas_url',
-            'secure_page_tab_url', 'server_ip_whitelist', 'social_discovery', 'subcategory', 'supports_attribution',
-            'supports_implicit_sdk_logging', 'terms_of_service_url', 'url_scheme_suffix', 'user_support_email', 'user_support_url',
+            'mobile_profile_section_url', 'mobile_web_url', 'monthly_active_users', 
+			'namespace', 'page_tab_default_name', 'page_tab_url', 'privacy_policy_url', 
+			'profile_section_url', 'restriction_info', 'secure_canvas_url',
+            'secure_page_tab_url', 'server_ip_whitelist', 'social_discovery', 'subcategory', 
+			'supports_attribution', 'supports_implicit_sdk_logging', 'terms_of_service_url', 
+			'url_scheme_suffix', 'user_support_email', 'user_support_url',
             'website_url', 'weekly_active_users'),
-        'apprequest' => array('app_id', 'created_time', 'data', 'message', 'recipient_uid',
+        'apprequest' => array(
+			'app_id', 'created_time', 'data', 'message', 'recipient_uid',
             'request_id', 'sender_uid'),
-        'checkin' => array('app_id', 'author_uid', 'checkin_id', 'coords', 'message',
+        'checkin' => array(
+			'app_id', 'author_uid', 'checkin_id', 'coords', 'message',
             'post_id', 'tagged_uids', 'target_id', 'target_type', 'timestamp'),
-        'comment' => array('app_id', 'attachment', 'target', 'title', 'type',
+        'comment' => array(
+			'app_id', 'attachment', 'target', 'title', 'type',
             'url', 'subattachments', 'can_comment', 'can_like', 'can_remove',
             'comment_count', 'fromid', 'id', 'is_private', 'likes',
             'object_id', 'object_id_cursor', 'parent_id', 'parent_id_cursor', 'post_fbid',
@@ -201,27 +207,30 @@ class Select extends Base
         'comments_info' => array('app_id', 'count', 'updated_time', 'xid'),
         'connection' => array('is_following', 'source_id', 'target_id', 'target_type'),
         'cookies' => array('expires', 'name', 'path', 'uid', 'value'),
-        'column' => array('column_name', 'description', 'is_cursor', 'is_deprecated', 'table_name',
-            'type'),
+        'column' => array(
+			'column_name', 'description', 'is_cursor', 'is_deprecated', 
+			'table_name', 'type'),
         'developer' => array('application_id', 'developer_id', 'role'),
         'domain' => array('domain_id', 'domain_name'),
         'domain_admin' => array('domain_id', 'owner_id'),
-        'event' => array('all_members_count', 'attending_count', 'can_invite_friends', 'creator', 'creator_cursor',
-            'declined_count', 'description', 'eid', 'end_time', 'has_profile_pic',
-            'hide_guest_list', 'host', 'is_date_only', 'location', 'name',
-            'not_replied_count', 'parent_group_id', 'pic', 'pic_big', 'pic_cover',
+        'event' => array(
+			'all_members_count', 'attending_count', 'can_invite_friends', 'creator', 
+			'creator_cursor', 'declined_count', 'description', 'eid', 'end_time', 
+			'has_profile_pic', 'hide_guest_list', 'host', 'is_date_only', 'location', 
+			'name', 'not_replied_count', 'parent_group_id', 'pic', 'pic_big', 'pic_cover',
             'pic_small', 'pic_square', 'privacy', 'start_time', 'ticket_uri',
             'timezone', 'unsure_count', 'update_time', 'venue', 'version'),
-        'event_member' => array('eid', 'inviter', 'inviter_type', 'rsvp_status', 'start_time',
-            'uid'),
+        'event_member' => array(
+			'eid', 'inviter', 'inviter_type', 'rsvp_status', 
+			'start_time', 'uid'),
         'family' => array('birthday', 'name', 'profile_id', 'relationship', 'uid'),
         'friend' => array('uid1', 'uid2'),
-        'friendlist' => array('count', 'flid', 'name', 'owner', 'owner_cursor',
-            'type'),
+        'friendlist' => array(
+			'count', 'flid', 'name', 'owner', 'owner_cursor', 'type'),
         'friendlist_member' => array('flid', 'flid_cursor', 'uid'),
-        'friend_request' => array('is_hidden', 'message', 'time', 'uid_from', 'uid_to',
-            'unread'),
-        'group' => array('creator', 'description', 'email', 'gid', 'icon',
+        'friend_request' => array('is_hidden', 'message', 'time', 'uid_from', 'uid_to', 'unread'),
+        'group' => array(
+			'creator', 'description', 'email', 'gid', 'icon',
             'icon34', 'icon50', 'icon68', 'name', 'nid',
             'office', 'parent_id', 'pic', 'pic_big', 'pic_cover',
             'pic_small', 'pic_square', 'privacy', 'recent_news', 'update_time',
@@ -268,11 +277,11 @@ class Select extends Base
             'personal_interests', 'pharma_safety_info', 'phone', 'pic', 'pic_big',
             'pic_cover', 'pic_large', 'pic_small', 'pic_square', 'plot_outline',
             'press_contact', 'price_range', 'produced_by', 'products', 'promotion_eligible',
-            'promotion_ineligible_reason', 'public_transit', 'record_label', 'release_date', 'restaurant_services',
-            'restaurant_specialties', 'schedule', 'screenplay_by', 'season', 'starring',
-            'store_number', 'studio', 'talking_about_count', 'type', 'unread_message_count',
-            'unseen_message_count', 'unseen_notif_count', 'username', 'website', 'were_here_count',
-            'written_by'),
+            'promotion_ineligible_reason', 'public_transit', 'record_label', 'release_date', 
+			'restaurant_services', 'restaurant_specialties', 'schedule', 'screenplay_by', 
+			'season', 'starring', 'store_number', 'studio', 'talking_about_count', 'type', 
+			'unread_message_count', 'unseen_message_count', 'unseen_notif_count', 'username', 
+			'website', 'were_here_count', 'written_by'),
         'page_admin' => array('last_used_time', 'page_id', 'perms', 'role', 'type',
             'uid'),
         'page_blocked_user' => array('page_id', 'uid'),
@@ -280,20 +289,26 @@ class Select extends Base
         'page_fan' => array('created_time', 'page_id', 'profile_section', 'type', 'uid'),
         'page_milestone' => array('created_time', 'description', 'end_time', 'id', 'is_hidden',
             'owner_id', 'start_time', 'title', 'updated_time'),
-        'permissions' => array('ads_management', 'bookmarked', 'create_event', 'create_note', 'email',
-            'export_stream', 'friends_about_me', 'friends_activities', 'friends_birthday', 'friends_education_history',
-            'friends_events', 'friends_groups', 'friends_hometown', 'friends_interests', 'friends_likes',
-            'friends_location', 'friends_notes', 'friends_online_presence', 'friends_photo_video_tags', 'friends_photos',
-            'friends_questions', 'friends_relationship_details', 'friends_relationships', 'friends_religion_politics', 'friends_status',
-            'friends_subscriptions', 'friends_videos', 'friends_website', 'friends_work_history', 'manage_friendlists',
+        'permissions' => array(
+			'ads_management', 'bookmarked', 'create_event', 'create_note', 'email',
+            'export_stream', 'friends_about_me', 'friends_activities', 'friends_birthday', 
+			'friends_education_history', 'friends_events', 'friends_groups', 
+			'friends_hometown', 'friends_interests', 'friends_likes',
+            'friends_location', 'friends_notes', 'friends_online_presence', 
+			'friends_photo_video_tags', 'friends_photos',
+            'friends_questions', 'friends_relationship_details', 
+			'friends_relationships', 'friends_religion_politics', 'friends_status',
+            'friends_subscriptions', 'friends_videos', 'friends_website', 
+			'friends_work_history', 'manage_friendlists',
             'manage_notifications', 'manage_pages', 'photo_upload', 'publish_actions', 'publish_checkins',
             'publish_stream', 'read_friendlists', 'read_insights', 'read_mailbox', 'read_page_mailboxes',
             'read_requests', 'read_stream', 'rsvp_event', 'share_item', 'sms',
             'status_update', 'tab_added', 'uid', 'user_about_me', 'user_activities',
             'user_birthday', 'user_education_history', 'user_events', 'user_groups', 'user_hometown',
             'user_interests', 'user_likes', 'user_location', 'user_notes', 'user_online_presence',
-            'user_photo_video_tags', 'user_photos', 'user_questions', 'user_relationship_details', 'user_relationships',
-            'user_religion_politics', 'user_status', 'user_subscriptions', 'user_videos', 'user_website',
+            'user_photo_video_tags', 'user_photos', 'user_questions', 
+			'user_relationship_details', 'user_relationships', 'user_religion_politics', 
+			'user_status', 'user_subscriptions', 'user_videos', 'user_website',
             'user_work_history', 'video_upload', 'xmpp_login'),
         'permissions_info' => array('header', 'permission_name', 'summary'),
         'photo' => array('aid', 'aid_cursor', 'album_object_id', 'album_object_id_cursor', 'backdated_time',
@@ -330,7 +345,8 @@ class Select extends Base
             'reviewer_id'),
         'score' => array('app_id', 'user_id', 'value'),
         'standard_friend_info' => array('uid1', 'uid2'),
-        'standard_user_info' => array('affiliations', 'allowed_restrictions', 'birthday', 'credit_currency', 'credit_deals',
+        'standard_user_info' => array(
+			'affiliations', 'allowed_restrictions', 'birthday', 'credit_currency', 'credit_deals',
             'current_location', 'email', 'first_name', 'last_name', 'locale',
             'name', 'payment_pricepoints', 'profile_url', 'proxied_email', 'sex',
             'sort_first_name', 'sort_last_name', 'third_party_id', 'timezone', 'uid',
@@ -364,9 +380,11 @@ class Select extends Base
             'voicemailUid', 'threadName', 'threadPic', 'message_id', 'object_sender',
             'offline_threading_id', 'recipients', 'sender', 'share_map', 'shares',
             'subject', 'tags', 'thread_id', 'timestamp', 'unread'),
-        'unified_message_count' => array('folder', 'last_action_id', 'last_seen_time', 'refetch_action_id', 'total_threads',
+        'unified_message_count' => array(
+			'folder', 'last_action_id', 'last_seen_time', 'refetch_action_id', 'total_threads',
             'unread_count', 'unseen_count'),
-        'unified_message_sync' => array('action_id', 'attachment_map', 'attachments', 'body', 'containing_message_id',
+        'unified_message_sync' => array(
+			'action_id', 'attachment_map', 'attachments', 'body', 'containing_message_id',
             'coordinates', 'forwarded_message_id', 'forwarded_messages', 'html_body', 'is_forwarded',
             'is_user_generated', 'log_message', 'callLog', 'smsLog', 'voiceMailLog',
             'voicemailUid', 'threadName', 'threadPic', 'message_id', 'object_sender',
@@ -381,18 +399,20 @@ class Select extends Base
             'snippet_message_id', 'snippet_sender', 'subject', 'tags', 'thread_and_participants_name',
             'thread_fbid', 'thread_id', 'thread_participants', 'timestamp', 'title',
             'unread', 'unseen'),
-        'unified_thread_action' => array('action_id', 'actor', 'body', 'internal_message_id', 'thread_id',
+        'unified_thread_action' => array(
+			'action_id', 'actor', 'body', 'internal_message_id', 'thread_id',
             'timestamp', 'type', 'users'),
-        'unified_thread_count' => array('folder', 'last_action_id', 'last_seen_time', 'refetch_action_id', 'total_threads',
-            'unread_count', 'unseen_count'),
+        'unified_thread_count' => array(
+			'folder', 'last_action_id', 'last_seen_time', 'refetch_action_id', 
+			'total_threads', 'unread_count', 'unseen_count'),
         'unified_thread_sync' => array('action_id', 'admin_snippet', 'archived', 'auto_mute', 'can_reply',
             'folder', 'former_participants', 'has_attachments', 'is_group_conversation', 'is_named_conversation',
             'is_subscribed', 'last_visible_add_action_id', 'link', 'mute', 'name',
             'num_messages', 'num_unread', 'object_participants', 'participants', 'pic_hash',
             'read_receipts', 'refetch_action_id', 'senders', 'single_recipient', 'snippet',
-            'snippet_message_has_attachment', 'snippet_message_id', 'snippet_sender', 'subject', 'sync_change_type',
-            'tags', 'thread_and_participants_name', 'thread_fbid', 'thread_id', 'thread_participants',
-            'timestamp', 'title', 'unread', 'unseen'),
+            'snippet_message_has_attachment', 'snippet_message_id', 'snippet_sender', 'subject', 
+			'sync_change_type', 'tags', 'thread_and_participants_name', 'thread_fbid', 
+			'thread_id', 'thread_participants', 'timestamp', 'title', 'unread', 'unseen'),
         'url_like' => array('url', 'user_id'),
         'user' => array('about_me', 'activities', 'affiliations', 'age_range', 'allowed_restrictions',
             'birthday', 'birthday_date', 'books', 'can_message', 'can_post',

@@ -29,6 +29,7 @@ class Search extends Base
 {
     const ASC = 'ASC';
     const DESC = 'DESC';
+	
     protected $database = null;
     protected $table = null;
     protected $columns = array();
@@ -36,12 +37,12 @@ class Search extends Base
     protected $sort = array();
     protected $start = 0;
     protected $range = 0;
-    protected $group = array();
+    protected $groups = array();
 
     /**
      * Preload the database
      * 
-     * @param Fql $database
+     * @param Eden\Facebook\Fql
      */
     public function __construct(Fql $database)
     {
@@ -53,10 +54,11 @@ class Search extends Base
      * 
      * @param type $name
      * @param type $args
-     * @return Search
+     * @return mixed
      */
     public function __call($name, $args)
     {
+		//if they want magical filtering
         if (strpos($name, 'filterBy') === 0) {
             //filterByUserName('Chris', '-')
             $separator = '_';
@@ -64,6 +66,7 @@ class Search extends Base
                 $separator = (string) $args[1];
             }
 
+			//transform method name to column name
             $key = StringType::i($name)
                     ->substr(8)
                     ->preg_replace("/([A-Z])/", $separator . "$1")
@@ -77,18 +80,21 @@ class Search extends Base
 
             $key = $key . '=%s';
 
+			//add filter
             $this->addFilter($key, $args[0]);
 
             return $this;
         }
 
+		//if they want magical sorting
         if (strpos($name, 'sortBy') === 0) {
             //filterByUserName('Chris', '-')
             $separator = '_';
-            if (isset($args[1]) && is_scalar($args[1])) {
+            if(isset($args[1]) && is_scalar($args[1])) {
                 $separator = (string) $args[1];
             }
 
+			//transform method name to column name
             $key = StringType::i($name)
                     ->substr(6)
                     ->preg_replace("/([A-Z])/", $separator . "$1")
@@ -100,6 +106,7 @@ class Search extends Base
                 $args[0] = self::ASC;
             }
 
+			//add sort
             $this->addSort($key, $args[0]);
 
             return $this;
@@ -109,8 +116,8 @@ class Search extends Base
             return parent::__call($name, $args);
         } catch (CoreException $e) {
             Exception::i()
-                    ->setMessage($e->getMessage())
-                    ->trigger();
+				->setMessage($e->getMessage())
+				->trigger();
         }
     }
 
@@ -119,11 +126,12 @@ class Search extends Base
      * 
      * @param string
      * @param string[,string..]
-     * @return this
+     * @return Eden\Facebook\Fql\Search
      */
     public function addFilter()
     {
-        Argument::i()->test(1, 'string'); // argument 1 must be a string
+		// argument 1 must be a string
+        Argument::i()->test(1, 'string'); 
 
         $this->filter[] = func_get_args();
 
@@ -135,7 +143,7 @@ class Search extends Base
      * 
      * @param string
      * @param string
-     * @return this
+     * @return Eden\Facebook\Fql\Search
      */
     public function addSort($column, $order = self::ASC)
     {
@@ -155,10 +163,15 @@ class Search extends Base
     /**
      * Returns the results in a collection
      *
-     * @return Collection
+	 * @param string
+     * @return Eden\Utility\Collection
      */
     public function getCollection($key = 'last')
     {
+		// argument 1 must be a string
+		Argument::i()->test(1, 'string'); 
+		
+		//
         $rows = $this->getRows($key);
 
         if (count($this->group) == 1) {
@@ -175,17 +188,22 @@ class Search extends Base
     /**
      * Returns the array rows
      *
+	 * @param string
      * @return array
      */
     public function getRows($key = 'last')
     {
+		//defne search group
         $this->group($key);
-
-        if (empty($this->group)) {
+		
+		//if groups are empty 
+        if(empty($this->groups)) {
+			//do nothing
             return array();
         }
 
         $group = array();
+		//we want to run the query now
         foreach ($this->group as $key => $query) {
             $this->table = $query['table'];
             $this->columns = $query['columns'];
@@ -194,31 +212,38 @@ class Search extends Base
             $this->start = $query['start'];
             $this->range = $query['range'];
 
+			//now get the query
             $query = $this->getQuery();
-
+			
+			//if columns
             if (!empty($this->columns)) {
+				//make it into a string
                 $query->select(implode(', ', $this->columns));
             }
 
+			//add all the sorts
             foreach ($this->sort as $name => $value) {
                 $query->sortBy($name, $value);
             }
 
+			//if range
             if ($this->range) {
+				//add pagination
                 $query->limit($this->start, $this->range);
             }
-
+			
+			//put it into out temp group
             $group[$key] = $query;
         }
 
+		//run it through FB REST/CURL
         $query = $group;
 
         if (count($query) == 1) {
             $query = $group[$key];
         }
 
-        $results = $this->database->query($query);
-        return $results;
+        return $this->database->query($query);
     }
 
     /**
@@ -236,7 +261,7 @@ class Search extends Base
             return sizeOf($rows);
         }
 
-        return false;
+        return 0;
     }
 
     /**
@@ -244,16 +269,20 @@ class Search extends Base
      * Useful for multiple queries.
      *
      * @param scalar
-     * @return this
+     * @return Eden\Facebook\Fql\Search
      */
     public function group($key)
     {
         Argument::i()->test(1, 'scalar');
+		
+		//if no table
         if (is_null($this->table)) {
+			//theres no point in continuing
             return $this;
         }
 
-        $this->group[$key] = array(
+		//add the group
+        $this->groups[$key] = array(
             'table' => $this->table,
             'columns' => $this->columns,
             'filter' => $this->filter,
@@ -261,6 +290,7 @@ class Search extends Base
             'start' => $this->start,
             'range' => $this->range);
 
+		//reset the instance
         $this->table = null;
         $this->columns = array();
         $this->filter = array();
@@ -275,11 +305,13 @@ class Search extends Base
      * Sets Columns
      * 
      * @param string[,string..]|array
-     * @return this
+     * @return Eden\Facebook\Fql\Search
      */
     public function setColumns($columns)
     {
+		//if columns is not an array
         if (!is_array($columns)) {
+			//they defined the columns as arguments
             $columns = func_get_args();
         }
 
@@ -292,7 +324,7 @@ class Search extends Base
      * Sets the pagination page
      *
      * @param int
-     * @return this
+     * @return Eden\Facebook\Fql\Search
      */
     public function setPage($page)
     {
@@ -311,11 +343,12 @@ class Search extends Base
      * Sets the pagination range
      *
      * @param int
-     * @return this
+     * @return Eden\Facebook\Fql\Search
      */
     public function setRange($range)
     {
-        Argument::i()->test(1, 'int'); // argument 1 must be an integer
+		// argument 1 must be an integer
+        Argument::i()->test(1, 'int'); 
 
         if ($range < 0) {
             $range = 25;
@@ -330,11 +363,12 @@ class Search extends Base
      * Sets the pagination start
      *
      * @param int
-     * @return this
+     * @return Eden\Facebook\Fql\Search
      */
     public function setStart($start)
     {
-        Argument::i()->test(1, 'int'); // argument 1 must be an integer
+		// argument 1 must be an integer
+        Argument::i()->test(1, 'int'); 
 
         if ($start < 0) {
             $start = 0;
@@ -349,11 +383,12 @@ class Search extends Base
      * Sets Table
      * 
      * @param string
-     * @return this
+     * @return Eden\Facebook\Fql\Search
      */
     public function setTable($table)
     {
-        Argument::i()->test(1, 'string'); // argument 1 must be an string
+		// argument 1 must be an string
+        Argument::i()->test(1, 'string'); 
         $this->table = $table;
         return $this;
     }
@@ -361,7 +396,7 @@ class Search extends Base
     /**
      * Returns the complete select statement
      * 
-     * @return Select
+     * @return Eden\Facebook\Fql\Select
      */
     protected function getQuery()
     {
@@ -370,13 +405,16 @@ class Search extends Base
         foreach ($this->filter as $i => $filter) {
             //array('post_id=%s AND post_title IN %s', 123, array('asd'));
             $where = array_shift($filter);
+			//make where into a string
             if (!empty($filter)) {
                 foreach ($filter as $i => $value) {
                     if (!is_string($value)) {
                         continue;
                     }
+					
                     $filter[$i] = "'" . $value . "'";
                 }
+				
                 $where = vsprintf($where, $filter);
             }
 

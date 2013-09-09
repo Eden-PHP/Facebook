@@ -1,6 +1,4 @@
-<?php
-
-//-->
+<?php //-->
 /*
  * This file is part of the Eden package.
  * (c) 2011-2012 Openovate Labs
@@ -12,6 +10,7 @@
 namespace Eden\Facebook;
 
 use Eden\Utility\Oauth2\Client;
+use Eden\Utility\Argument;
 
 /**
  * Facebook Authentication
@@ -28,6 +27,7 @@ class Auth extends Client
     const REQUEST_URL = 'https://www.facebook.com/dialog/oauth';
     const ACCESS_URL = 'https://graph.facebook.com/oauth/access_token';
     const USER_AGENT = 'facebook-php-3.1';
+	
     protected $appId = null;
     protected $secret = null;
     protected $redirect = null;
