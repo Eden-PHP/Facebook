@@ -1,5 +1,5 @@
 {
-    "name": "eden-php/facebook",
+    "name": "eden/facebook",
     "type": "library",
     "description": "Designed for rapid prototyping, with less code.",
     "keywords": ["eden", "library"],
@@ -7,16 +7,17 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Christian Blanquera",
-            "email": "cblanquera@openovate.com"
-        },
-        {
-            "name": "Symon Buenavista",
-            "email": "sbuenavista@openovate.com"
+            "name": "Ian Mark Muninio",
+            "email": "ianmuninio@openovate.com"
         }
     ],
     "require": {
-        "php": ">=5.3.1"
+        "php": ">=5.3.1",
+        "eden/core": "1.*",
+        "eden/curl": "1.*",
+        "eden/collection": "1.*",
+        "eden/model": "1.*",
+        "eden/type": "1.*"
     },
     "autoload": {
         "psr-2": {"Eden\\": "library/"}
