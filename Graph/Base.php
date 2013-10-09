@@ -35,8 +35,8 @@ class Base extends FacebookBase
 
     /**
      * Preloads the token of the graph.
-     * 
-     * @param type $token
+     *
+     * @param string $token
      */
     public function __construct($token)
     {
@@ -45,8 +45,8 @@ class Base extends FacebookBase
 
     /**
      * Sets the id of the object.
-     * 
-     * @param string $id id of the facebook object
+     *
+     * @param  string $id id of the facebook object
      * @return this
      */
     public function setId($id)
@@ -58,7 +58,7 @@ class Base extends FacebookBase
 
     /**
      * Returns the json response of the request.
-     * 
+     *
      * @return array json object
      */
     protected function getResponse()
@@ -67,12 +67,12 @@ class Base extends FacebookBase
         $url = Graph::GRAPH_URL . $this->id . '/' . $this->type;
         $query = array('access_token' => $this->token);
         $url .= '?' . http_build_query($query);
-        
+
         // send it into curl
         $response = Curl::i()
                 ->setUrl($url) // sets the url
                 ->setConnectTimeout(10) // sets connection timeout to 10 sec.
-                ->setFollowLocation(true) // sets the follow location to true 
+                ->setFollowLocation(true) // sets the follow location to true
                 ->setTimeout(60) // set page timeout to 60 sec
                 ->verifyPeer(false) // verifying Peer must be boolean
                 ->setUserAgent(Auth::USER_AGENT) // set facebook USER_AGENT
@@ -86,11 +86,11 @@ class Base extends FacebookBase
 
     /**
      * Calls the facebook object if the name exists.
-     * 
+     *
      * @param string $name name of the facebook object
-     * @param type $args the contructor arguments
-     * 
-     * @return FacebookObject
+     * @param scalar $args the contructor arguments
+     *
+     * @return this
      */
     public function __call($name, $args)
     {

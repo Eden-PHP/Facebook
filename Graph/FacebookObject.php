@@ -29,9 +29,9 @@ class FacebookObject extends Base
 
     /**
      * Preloads the token and post.
-     * 
+     *
      * @param sttring $token access token
-     * @param string $name name of the album
+     * @param string  $name  name of the album
      */
     public function __construct($token, $type, $objects, $args)
     {
@@ -50,9 +50,9 @@ class FacebookObject extends Base
 
     /**
      * Dynamically sets the values based on the object needs.
-     * 
-     * @param type $name name of the method
-     * @param type $args arguments
+     *
+     * @param  string $name name of the method
+     * @param  array  $args arguments
      * @return this
      */
     public function __call($name, $args)
@@ -102,7 +102,7 @@ class FacebookObject extends Base
 
     /**
      * Create a facebook object
-     * 
+     *
      * @return array jsonobject
      */
     public function create()
@@ -112,8 +112,8 @@ class FacebookObject extends Base
 
     /**
      * Checks if the arguments is valid from the required field.
-     * 
-     * @param type $args the arguments to be checked
+     *
+     * @param scalar $args the arguments to be checked
      */
     protected function validateArguments($args)
     {
@@ -125,10 +125,10 @@ class FacebookObject extends Base
                 $this->checkArgument($args[$idx], $value['type'], $this->type, $idx + 1);
 
                 $this->post[$key] = $args[$idx];
-                
+
                 if ($value['type'] === 'file') {
                     $this->post[$key] = '@' . $args[$idx];
-                    
+
                     var_dump($this->post);
                 }
             }
@@ -138,12 +138,12 @@ class FacebookObject extends Base
 
     /**
      * Checks the argument if matched with the type.
-     * 
-     * @param type $arg the args
-     * @param type $type the type to be match
-     * @param type $name name of the facebookobject
-     * @param type $argNo argument number from other function
-     * @param type $message custom message if match fails
+     *
+     * @param scalar $arg     the args
+     * @param string $type    the type to be match
+     * @param string $name    name of the facebookobject
+     * @param int    $argNo   argument number from other function
+     * @param string $message custom message if match fails
      */
     protected function checkArgument($arg, $type, $name, $argNo, $message = null)
     {
@@ -162,9 +162,9 @@ class FacebookObject extends Base
 
     /**
      * Validates the type of facebook object privacy and encode it to json object.
-     * 
-     * @param type $args the arguments to be encoded
-     * 
+     *
+     * @param array $args the arguments to be encoded
+     *
      * @return this
      */
     protected function validatePrivacy($args)

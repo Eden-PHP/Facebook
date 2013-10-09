@@ -32,7 +32,7 @@ class Feed extends Base
 
     /**
      * Sets the id of the page.
-     * 
+     *
      * @param int $id
      */
     public function __construct($id)

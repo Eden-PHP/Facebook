@@ -150,7 +150,7 @@ class Select extends Base
 
         if (empty($this->select) || $this->select == '*') {
             $this->select = implode(', ', self::$columns[$this->from]);
-        } else if ($this->select == 'COUNT(*)') {
+        } elseif ($this->select == 'COUNT(*)') {
             $this->select = self::$columns[$this->from][0];
         }
 
@@ -163,7 +163,7 @@ class Select extends Base
 
     /**
      * Returns the complete facebook query
-     * 
+     *
      * @return string the query
      */
     public function __toString()

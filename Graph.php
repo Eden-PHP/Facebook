@@ -30,7 +30,7 @@ class Graph extends Base
 
     /**
      * Preloads the token
-     * 
+     *
      * @param string
      */
     public function __construct($token)
@@ -43,35 +43,37 @@ class Graph extends Base
 
     /**
      * Returns the facebook object.
-     * 
-     * @param type $name name of the facebook object
-     * @param type $args the constructor args
-     * @return FacebookObject
+     *
+     * @param string $name name of the facebook object
+     * @param scalar $args the constructor args
+     *
+     * @return this
      */
     public function __call($name, $args)
     {
         return GraphBase::i($this->token)
                         ->__call($name, $args);
     }
-    
+
     /**
      * Deletes an object based on id.
-     * 
-     * @param type $id id of the object
-     * @param type $connection [optional] the connection
+     *
+     * @param string $id         id of the object
+     * @param string $connection [optional] the connection
+     *
      * @return array|bool
      */
     public function delete($id, $connection = null)
     {
         Argument::i()
                 ->test(1, 'string'); // argument 1 must be a string
-        
+
         $url = self::GRAPH_URL . '/' . $id;
 
         if ($connection) {
             $url .= '/' . $connection;
         }
-        
+
         $url .= '?access_token=' . $this->token;
 
         return $this->getResponse($url, array(), Curl::DELETE);
@@ -90,7 +92,7 @@ class Graph extends Base
         Argument::i()
                 ->test(1, 'string', 'int') // argument 1 must be a string or int
                 ->test(2, 'string', 'array'); // argument 2 must be a string or array
-        //if fields is an array	
+        //if fields is an array
         if (is_array($fields)) {
             //make it into a string
             $fields = implode(',', $fields);
@@ -107,7 +109,7 @@ class Graph extends Base
      * @param string|null [optional] the page name
      * @param array [optional] the query
      * @param bool [default: true] required auth
-     * 
+     *
      * @return array json object
      */
     public function getObject($id = 'me', $connection = null, array $query = array(), $auth = true)
@@ -146,11 +148,11 @@ class Graph extends Base
 
     /**
      * Get response using curl.
-     * 
-     * @param type $url graph url
-     * @param array $post post fields
-     * @param type $request the request method
-     * 
+     *
+     * @param url    $url     graph url
+     * @param array  $post    post fields
+     * @param string $request the request method
+     *
      * @return array jsonobject
      */
     protected function getResponse($url, array $post = array(), $request = Curl::GET)

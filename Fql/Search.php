@@ -42,7 +42,7 @@ class Search extends FacebookBase
 
     /**
      * Preload the database
-     * 
+     *
      * @param Fql $database the fql instance
      */
     public function __construct(Fql $database)
@@ -52,10 +52,10 @@ class Search extends FacebookBase
 
     /**
      * Magic method calling for this class.
-     * 
-     * @param type $name
-     * @param type $args
-     * 
+     *
+     * @param string $name
+     * @param scalar $args
+     *
      * @return mixed
      */
     public function __call($name, $args)
@@ -125,7 +125,7 @@ class Search extends FacebookBase
 
     /**
      * Adds filter.
-     * 
+     *
      * @param string
      * @param string[,string..]
      * @return this
@@ -142,7 +142,7 @@ class Search extends FacebookBase
 
     /**
      * Adds sort.
-     * 
+     *
      * @param string
      * @param string
      * @return this
@@ -197,7 +197,7 @@ class Search extends FacebookBase
         // defne search group
         $this->group($key);
 
-        // if groups are empty 
+        // if groups are empty
         if (empty($this->groups)) {
             // do nothing
             return array();
@@ -307,7 +307,7 @@ class Search extends FacebookBase
 
     /**
      * Sets Columns.
-     * 
+     *
      * @param string[,string..]|array
      * @return this
      */
@@ -386,7 +386,7 @@ class Search extends FacebookBase
 
     /**
      * Sets Table.
-     * 
+     *
      * @param string
      * @return this
      */
@@ -401,7 +401,7 @@ class Search extends FacebookBase
 
     /**
      * Returns the complete select statement.
-     * 
+     *
      * @return this
      */
     protected function getQuery()

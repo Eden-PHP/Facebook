@@ -19,7 +19,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        
+
     }
 
     /**
@@ -28,7 +28,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        
+
     }
 
     /**
@@ -38,6 +38,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     {
         if (empty($this->accessToken) || empty($this->appToken)) {
             $this->assertTrue(false, 'Please set your application token and admin token.');
+
             return;
         }
 

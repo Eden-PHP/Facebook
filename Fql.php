@@ -22,9 +22,9 @@ use Eden\Model\Base as Model;
 
 /**
  * Abstractly defines a layout of available methods to
- * connect to and query a database. This class also lays out 
+ * connect to and query a database. This class also lays out
  * query building methods that auto renders a valid query
- * the specific database will understand without actually 
+ * the specific database will understand without actually
  * needing to know the query language.
  *
  * @vendor Eden
@@ -173,7 +173,7 @@ class Fql extends Base
             if ($index == self::FIRST) {
                 $index = 0;
                 // else if index equals string last
-            } else if ($index == self::LAST) {
+            } elseif ($index == self::LAST) {
                 $index = count($results) - 1;
             }
 
@@ -280,7 +280,7 @@ class Fql extends Base
                 ->setUserAgent(Auth::USER_AGENT)
                 ->setHeaders('Expect')
                 ->getJsonResponse();
-        
+
         // store a historical data on it
         $this->queries[] = array(
             'query' => $query['q'],
@@ -304,8 +304,8 @@ class Fql extends Base
 
     /**
      * Returns a new instance of Select class.
-     * 
-     * @param string|array $select columns to be selected (Default: *)
+     *
+     * @param  string|array $select columns to be selected (Default: *)
      * @return Select
      */
     public function select($select = '*')

@@ -27,5 +27,5 @@ use Eden\Facebook\Exception as FacebookException;
  */
 class Exception extends FacebookException
 {
-    
+
 }

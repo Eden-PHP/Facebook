@@ -27,5 +27,5 @@ use Eden\Core\Exception as CoreException;
  */
 class Exception extends CoreException
 {
-    
+
 }

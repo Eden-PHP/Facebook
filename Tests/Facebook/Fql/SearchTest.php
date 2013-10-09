@@ -42,7 +42,7 @@ class SearchTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        
+
     }
 
     public function testCode()
@@ -64,8 +64,7 @@ class SearchTest extends PHPUnit_Framework_TestCase
 
     public function testToken()
     {
-        if ((empty($this->code) || empty($this->token)))
-        {
+        if ((empty($this->code) || empty($this->token))) {
             $auth = eden('facebook')
                     ->auth($this->key, $this->secret, $this->redirect);
 
@@ -167,7 +166,6 @@ class SearchTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers Eden\Facebook\Fql\Search::group
-     * @todo   Implement testGroup().
      */
     public function testGroup()
     {

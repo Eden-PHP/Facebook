@@ -30,10 +30,10 @@ class Auth extends Client
 
     /**
      * Sets the application's key, secret and redirect uri.
-     * 
-     * @param number $key the application's key
-     * @param alphanum $secret the application's secret
-     * @param url $redirect the application's redirect uri
+     *
+     * @param number   $key      the application's key
+     * @param alphanum $secret   the application's secret
+     * @param url      $redirect the application's redirect uri
      */
     public function __construct($key, $secret, $redirect)
     {
