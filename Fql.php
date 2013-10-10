@@ -322,7 +322,7 @@ class Fql extends Base
             return $this->queries[$index];
         }
 
-        return null;
+        return array();
     }
 
     /**
