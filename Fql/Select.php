@@ -25,10 +25,10 @@ class Select extends Base
 
     protected $select = null;
     protected $from = null;
-    protected $where = array();
-    protected $sortBy = array();
     protected $page = null;
     protected $length = null;
+    protected $where = array();
+    protected $sortBy = array();
 
     /**
      * Preloads the default selected columns.
