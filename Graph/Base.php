@@ -10,6 +10,7 @@
 namespace Eden\Facebook\Graph;
 
 use Eden\Curl\Base as Curl;
+use Eden\Facebook\Argument;
 use Eden\Facebook\Auth;
 use Eden\Facebook\Base as FacebookBase;
 use Eden\Facebook\Graph;
@@ -38,7 +39,7 @@ class Base extends FacebookBase
      * @param array $args the contructor arguments
      * @return \Eden\Facebook\Graph\FacebookObject|null
      */
-    public function __call($name, array $args = array())
+    public function __call($name, $args)
     {
         Argument::i()
                 ->test(1, 'string')

@@ -57,7 +57,7 @@ class Search extends FacebookBase
      * @return \Eden\Facebook\Fql\Search
      * @throws \Eden\Facebook\Fql\Exception
      */
-    public function __call($name, array $args = array())
+    public function __call($name, $args)
     {
         Argument::i()
                 ->test(1, 'string')
@@ -401,13 +401,13 @@ class Search extends FacebookBase
     }
 
     /**
-     * Returns the complete select statement.
+     * Returns the complete Select class statement.
      *
-     * @return string
+     * @return \Eden\Facebook\Fql\Select
      */
     protected function getQuery()
     {
-        $query = $this->database
+        $select = $this->database
                 ->select()
                 ->from($this->table);
 
@@ -427,9 +427,9 @@ class Search extends FacebookBase
                 $where = vsprintf($where, $filter);
             }
 
-            $query->where($where);
+            $select->where($where);
         }
 
-        return $query;
+        return $select;
     }
 }

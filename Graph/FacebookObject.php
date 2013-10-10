@@ -33,7 +33,7 @@ class FacebookObject extends Base
      * @return \Eden\Facebook\Graph\FacebookObject
      * @throws \Eden\Facebook\Graph\Exception
      */
-    public function __call($name, array $args = array())
+    public function __call($name, $args)
     {
         Argument::i()
                 ->test(1, 'string')
