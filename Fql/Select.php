@@ -42,6 +42,16 @@ class Select extends Base
         
         $this->select($select);
     }
+    
+    /**
+     * Returns the complete facebook query.
+     *
+     * @return string the query
+     */
+    public function __toString()
+    {
+        return $this->getQuery();
+    }
 
     /**
      * Select clause.
@@ -162,16 +172,6 @@ class Select extends Base
                 , $where, $sort, $limit);
 
         return trim(str_replace('  ', ' ', $query));
-    }
-
-    /**
-     * Returns the complete facebook query.
-     *
-     * @return string the query
-     */
-    public function __toString()
-    {
-        return $this->getQuery();
     }
 
     // tables and columns
