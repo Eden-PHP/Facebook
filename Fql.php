@@ -150,10 +150,10 @@ class Fql extends Base
      * 
      * @param string       $table
      * @param string|array $filters [optional]
-     * @param number       $sort
-     * @param number       $start
-     * @param number       $range
-     * @param number       $index   [optional]
+     * @param int|float    $sort
+     * @param int|float    $start
+     * @param int|float    $range
+     * @param int|float    $index   [optional]
      * @return array returns null if the results is empty
      */
     public function getRows(
