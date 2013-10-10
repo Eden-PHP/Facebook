@@ -34,14 +34,14 @@ class Search extends FacebookBase
     protected $columns = array();
     protected $filter = array();
     protected $sort = array();
+    protected $groups = array();
     protected $start = 0;
     protected $range = 0;
-    protected $groups = array();
 
     /**
      * Preload the database.
      *
-     * @param Fql $database the fql instance
+     * @param \Eden\Facebook\Fql $database the fql instance
      * @return void
      */
     public function __construct(Fql $database)
@@ -53,12 +53,16 @@ class Search extends FacebookBase
      * Magic method calling for this class.
      *
      * @param string $name
-     * @param scalar $args
+     * @param array $args
      * @return \Eden\Facebook\Fql\Search
      * @throws \Eden\Facebook\Fql\Exception
      */
-    public function __call($name, $args)
+    public function __call($name, array $args = array())
     {
+        Argument::i()
+                ->test(1, 'string')
+                ->test(2, 'array');
+        
         // if they want magical filtering
         if (strpos($name, 'filterBy') === 0) {
             // filterByUserName('Chris', '-')
@@ -129,7 +133,7 @@ class Search extends FacebookBase
      * @param string[,string..]
      * @return \Eden\Facebook\Fql\Search
      */
-    public function addFilter()
+    public function addFilter($blank)
     {
         Argument::i()->test(1, 'string');
 
@@ -184,13 +188,15 @@ class Search extends FacebookBase
     }
 
     /**
-     * Returns the array rows.
+     * Returns the results in array format.
      *
      * @param string $key [optional] (default: last)
      * @return array
      */
     public function getRows($key = 'last')
     {
+        Argument::i()->test(1, 'string');
+        
         // defne search group
         $this->group($key);
 
@@ -241,7 +247,8 @@ class Search extends FacebookBase
             $query = $group[$key];
         }
 
-        return $this->database->query($query);
+        return $this->database
+                ->query($query);
     }
 
     /**
@@ -267,7 +274,7 @@ class Search extends FacebookBase
     /**
      * Stores this search and resets class. Useful for multiple queries.
      *
-     * @param string $key
+     * @param scalar $key
      * @return \Eden\Facebook\Fql\Search
      */
     public function group($key)
@@ -308,6 +315,8 @@ class Search extends FacebookBase
      */
     public function setColumns($columns)
     {
+        Argument::i()->test(1, 'string', 'array');
+        
         // if columns is not an array
         if (!is_array($columns)) {
             // they defined the columns as arguments
@@ -385,6 +394,7 @@ class Search extends FacebookBase
     public function setTable($table)
     {
         Argument::i()->test(1, 'string');
+        
         $this->table = $table;
 
         return $this;
@@ -393,7 +403,7 @@ class Search extends FacebookBase
     /**
      * Returns the complete select statement.
      *
-     * @return \Eden\Facebook\Fql\Search
+     * @return string
      */
     protected function getQuery()
     {
