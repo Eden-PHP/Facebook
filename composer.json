@@ -21,7 +21,7 @@
         "eden/type": "1.*"
     },
     "autoload": {
-         "psr-0": { "Eden\\Facebook\\": "" }
+         "psr-2": { "Eden\\Facebook\\": "" }
     },
 	"target-dir": "Eden/Facebook"
 }
