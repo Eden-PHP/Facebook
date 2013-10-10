@@ -31,20 +31,22 @@ class FacebookObject extends Base
      * @param string $token
      * @param string $type
      * @param array  $objects
-     * @param scalar $args
+     * @param array $args
      * @return void
      */
-    public function __construct($token, $type, $objects, $args)
+    public function __construct($token, $type, $objects, array $args = array())
     {
         Argument::i()
                 ->test(1, 'string')
                 ->test(2, 'string')
-                ->test(3, 'array');
+                ->test(3, 'array')
+                ->test(4, 'array');
 
         $this->myObjects = $objects;
 
         $this->type = $type;
         parent::__construct($token); // call the parent
+        
         // validate the required arguments
         $this->validateArguments($args);
     }
@@ -57,8 +59,12 @@ class FacebookObject extends Base
      * @return \Eden\Facebook\Graph\FacebookObject
      * @throws \Eden\Facebook\Graph\Exception
      */
-    public function __call($name, $args)
+    public function __call($name, array $args = array())
     {
+        Argument::i()
+                ->test(1, 'string')
+                ->test(2, 'array');
+        
         // checks if starts with set
         if (strpos($name, 'set') === 0) {
             $trueName = $name;
@@ -115,10 +121,13 @@ class FacebookObject extends Base
     /**
      * Checks if the arguments is valid from the required field.
      *
-     * @param scalar $args the arguments to be checked
+     * @param array $args the arguments to be checked
+     * @return void
      */
-    protected function validateArguments($args)
+    protected function validateArguments(array $args = array())
     {
+        Argument::i()->test(1, 'array');
+                
         // get the required fields
         $idx = 0;
         foreach ($this->myObjects as $key => $value) {
@@ -141,16 +150,26 @@ class FacebookObject extends Base
     /**
      * Checks the argument if matched with the type.
      *
-     * @param scalar $arg     the args
-     * @param string $type    the type to be match
-     * @param string $name    name of the facebookobject
-     * @param int    $argNo   argument number from other function
-     * @param string $message custom message if match fails
+     * @param scalar      $arg     the args
+     * @param string      $type    the type to be match
+     * @param string      $name    name of the facebookobject
+     * @param int         $argNo   argument number from other function
+     * @param string|null $message custom message if match fails
+     * @return void
+     * @throws \Eden\Facebook\Graph\Exception
      */
     protected function checkArgument($arg, $type, $name, $argNo, $message = null)
     {
+        // check the argument 1 with try-catch block
+        Argument::i()
+                    ->test(2, 'string')
+                    ->test(3, 'string')
+                    ->test(4, 'int')
+                    ->test(5, 'string', 'null');
+        
         try {
-            Argument::i()->test(1, $type); // just check the argument type
+            Argument::i()
+                    ->test(1, $type); // just check the argument type
         } catch (CoreException $exc) {
             Exception::i()
                     ->setMessage($message ? $message :
@@ -168,8 +187,10 @@ class FacebookObject extends Base
      *
      * @return \Eden\Facebook\Graph\FacebookObject
      */
-    protected function validatePrivacy($args)
+    protected function validatePrivacy(array $args = array())
     {
+        Argument::i()->test(1, 'array');
+                
         // checks if the argument 1 is not set
         if (!isset($args[0])) {
             // set the message and throws an error

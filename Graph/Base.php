@@ -39,6 +39,8 @@ class Base extends FacebookBase
      */
     public function __construct($token)
     {
+        Argument::i()->test(1, 'string');
+        
         $this->token = $token;
     }
 
@@ -50,6 +52,8 @@ class Base extends FacebookBase
      */
     public function setId($id)
     {
+        Argument::i()->test(1, 'string');
+        
         $this->id = $id;
 
         return $this;
@@ -87,15 +91,20 @@ class Base extends FacebookBase
      * Calls the facebook object if the name exists.
      *
      * @param string $name name of the facebook object
-     * @param scalar $args the contructor arguments
-     *
-     * @return \Eden\Facebook\Graph\FacebookObject
+     * @param array $args the contructor arguments
+     * @return \Eden\Facebook\Graph\FacebookObject|null
      */
-    public function __call($name, $args)
+    public function __call($name, array $args = array())
     {
+        Argument::i()
+                ->test(1, 'string')
+                ->test(2, 'array');
+        
         if (isset($this->_objects[$name])) {
             return FacebookObject::i($this->token, $name, $this->_objects[$name], $args);
         }
+        
+        return null;
     }
 
     /**

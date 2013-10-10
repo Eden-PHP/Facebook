@@ -33,11 +33,13 @@ class Select extends Base
     /**
      * Preloads the default selected columns.
      * 
-     * @param string $select
+     * @param string|array $select
      * @return void
      */
     public function __construct($select = '*')
     {
+        Argument::i()->test(1, 'string', 'array');
+        
         $this->select($select);
     }
 
@@ -163,7 +165,7 @@ class Select extends Base
     }
 
     /**
-     * Returns the complete facebook query
+     * Returns the complete facebook query.
      *
      * @return string the query
      */
