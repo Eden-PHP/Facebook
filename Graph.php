@@ -155,6 +155,11 @@ class Graph extends Base
      */
     protected function getResponse($url, array $post = array(), $request = Curl::GET)
     {
+        Argument::i()
+                ->test(1, 'string')
+                ->test(2, 'array')
+                ->test(3, 'string');
+        
         //send it off
         $curl = Curl::i()
                 ->setUrl($url)
