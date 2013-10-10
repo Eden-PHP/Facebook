@@ -42,6 +42,7 @@ class Search extends FacebookBase
      * Preload the database.
      *
      * @param Fql $database the fql instance
+     * @return void
      */
     public function __construct(Fql $database)
     {
@@ -130,8 +131,7 @@ class Search extends FacebookBase
      */
     public function addFilter()
     {
-        Argument::i()
-                ->test(1, 'string'); // argument 1 must be a string
+        Argument::i()->test(1, 'string');
 
         $this->filter[] = func_get_args();
 
@@ -148,8 +148,8 @@ class Search extends FacebookBase
     public function addSort($column, $order = self::ASC)
     {
         Argument::i()
-                ->test(1, 'string') // argument 1 must be a string
-                ->test(2, 'string'); // argument 2 must be a string
+                ->test(1, 'string')
+                ->test(2, 'string');
 
         if ($order != self::DESC) {
             $order = self::ASC;
@@ -168,8 +168,7 @@ class Search extends FacebookBase
      */
     public function getCollection($key = 'last')
     {
-        Argument::i()
-                ->test(1, 'string'); // argument 1 must be a string
+        Argument::i()->test(1, 'string');
 
         $rows = $this->getRows($key);
 
@@ -273,8 +272,7 @@ class Search extends FacebookBase
      */
     public function group($key)
     {
-        Argument::i()
-                ->test(1, 'scalar');
+        Argument::i()->test(1, 'scalar');
 
         // if no table
         if (is_null($this->table)) {
@@ -329,8 +327,7 @@ class Search extends FacebookBase
      */
     public function setPage($page)
     {
-        Argument::i()
-                ->test(1, 'int'); // argument 1 must be an integer
+        Argument::i()->test(1, 'int');
 
         if ($page < 1) {
             $page = 1;
@@ -349,8 +346,7 @@ class Search extends FacebookBase
      */
     public function setRange($range)
     {
-        Argument::i()
-                ->test(1, 'int'); // argument 1 must be an integer
+        Argument::i()->test(1, 'int');
 
         if ($range < 0) {
             $range = 25;
@@ -369,8 +365,7 @@ class Search extends FacebookBase
      */
     public function setStart($start)
     {
-        Argument::i()
-                ->test(1, 'int'); // argument 1 must be an integer
+        Argument::i()->test(1, 'int');
 
         if ($start < 0) {
             $start = 0;
@@ -389,8 +384,7 @@ class Search extends FacebookBase
      */
     public function setTable($table)
     {
-        Argument::i()
-                ->test(1, 'string'); // argument 1 must be a string
+        Argument::i()->test(1, 'string');
         $this->table = $table;
 
         return $this;

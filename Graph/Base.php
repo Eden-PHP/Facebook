@@ -35,6 +35,7 @@ class Base extends FacebookBase
      * Preloads the token of the graph.
      *
      * @param string $token
+     * @return void
      */
     public function __construct($token)
     {

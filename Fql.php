@@ -44,6 +44,7 @@ class Fql extends Base
      * Preloads the access token.
      * 
      * @param string $token
+     * @return void
      */
     public function __construct($token)
     {
@@ -70,11 +71,11 @@ class Fql extends Base
             $index = null
     ) {
         Argument::i()
-                ->test(1, 'string') // argument 1 must be a string
-                ->test(2, 'string', 'array', 'null') // argument 2 must be a string numeric or null
-                ->test(4, 'numeric') // argument 4 must be a numeric
-                ->test(5, 'numeric') // argument 5 must be a numeric
-                ->test(6, 'numeric', 'null'); // argument 6 must be a numeric or null
+                ->test(1, 'string')
+                ->test(2, 'string', 'array', 'null')
+                ->test(4, 'numeric')
+                ->test(5, 'numeric')
+                ->test(6, 'numeric', 'null');
 
         $results = $this->getRows($table, $filters, $sort, $start, $range, $index);
 
@@ -104,9 +105,9 @@ class Fql extends Base
     public function getModel($table, $name, $value)
     {
         Argument::i()
-                ->test(1, 'string') // argument 1 must be a string
-                ->test(2, 'string') // argument 2 must be a string
-                ->test(3, 'string', 'numeric'); // argument 3 must be a string or numeric
+                ->test(1, 'string')
+                ->test(2, 'string')
+                ->test(3, 'string', 'numeric');
 
         $result = $this->getRow($table, $name, $value);
 
@@ -130,9 +131,9 @@ class Fql extends Base
     public function getRow($table, $name, $value)
     {
         Argument::i()
-                ->test(1, 'string') // argument 1 must be a string
-                ->test(2, 'string') // argument 2 must be a string
-                ->test(3, 'string', 'numeric'); // argument 3 must be a string or numeric
+                ->test(1, 'string')
+                ->test(2, 'string')
+                ->test(3, 'string', 'numeric');
 
         // select query
         $query = $this->select()
@@ -165,11 +166,11 @@ class Fql extends Base
             $index = null
     ) {
         Argument::i()
-                ->test(1, 'string') // argument 1 must be a string
-                ->test(2, 'string', 'array', 'null') // argument 2 must be a string numeric or null
-                ->test(4, 'numeric') // argument 4 must be a numeric
-                ->test(5, 'numeric') // argument 5 must be a numeric
-                ->test(6, 'numeric', 'null'); // argument 6 must be a numeric or null
+                ->test(1, 'string')
+                ->test(2, 'string', 'array', 'null')
+                ->test(4, 'numeric')
+                ->test(5, 'numeric')
+                ->test(6, 'numeric', 'null');
 
         $query = $this->select()->from($table);
 
@@ -254,8 +255,8 @@ class Fql extends Base
     public function getRowsCount($table, $filters = null)
     {
         Argument::i()
-                ->test(1, 'string') // argument 1 must be a string
-                ->test(2, 'string', 'array', 'null'); // argument 2 must be a string, array or null
+                ->test(1, 'string')
+                ->test(2, 'string', 'array', 'null');
 
         $query = $this->select('COUNT(*)')->from($table);
 
@@ -329,7 +330,8 @@ class Fql extends Base
      */
     public function query($query)
     {
-        Argument::i()->test(1, 'string', 'array', self::SELECT); // argument 1 must be a string or array
+        Argument::i()->test(1, 'string', 'array', self::SELECT);
+        
         // if query is a string
         if (!is_array($query)) {
             $query = array('q' => (string) $query);
@@ -392,8 +394,7 @@ class Fql extends Base
      */
     public function select($select = '*')
     {
-        Argument::i()
-                ->test(1, 'string', 'array'); // argument 1 must be a string or array
+        Argument::i()->test(1, 'string', 'array');
 
         return Select::i($select);
     }

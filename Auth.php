@@ -32,13 +32,14 @@ class Auth extends Client
      * @param string $key      the application's key
      * @param string $secret   the application's secret
      * @param string $redirect the application's redirect uri
+     * @return void
      */
     public function __construct($key, $secret, $redirect)
     {
         Argument::i()
-                ->test(1, 'string') // argument 1 must be a string
-                ->test(2, 'string') // argument 2 must be a string
-                ->test(3, 'url'); // argument 3 must be a url
+                ->test(1, 'string')
+                ->test(2, 'string')
+                ->test(3, 'url');
 
         parent::__construct($key, $secret, $redirect, self::REQUEST_URL, self::ACCESS_URL);
     }

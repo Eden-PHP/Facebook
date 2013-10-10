@@ -33,9 +33,9 @@ class Factory extends Base
     public function auth($key, $secret, $redirect)
     {
         Argument::i()
-                ->test(1, 'string') // argument 1 must be a string
-                ->test(2, 'string') // argument 2 must be a string
-                ->test(3, 'url'); // argument 3 must be a url
+                ->test(1, 'string')
+                ->test(2, 'string')
+                ->test(3, 'url');
 
         return Auth::i($key, $secret, $redirect);
     }
@@ -48,8 +48,7 @@ class Factory extends Base
      */
     public function feed($id)
     {
-        Argument::i()
-                ->test(1, 'string'); // argument 1 must be a string
+        Argument::i()->test(1, 'string');
 
         return Feed::i($id);
     }
@@ -62,8 +61,7 @@ class Factory extends Base
      */
     public function graph($token)
     {
-        Argument::i()
-                ->test(1, 'string'); // argument 1 must be a string
+        Argument::i()->test(1, 'string');
 
         return Graph::i($token);
     }
@@ -76,8 +74,7 @@ class Factory extends Base
      */
     public function fql($token)
     {
-        Argument::i()
-                ->test(1, 'string'); // argument 1 must be a string
+        Argument::i()->test(1, 'string');
 
         return Fql::i($token);
     }

@@ -34,6 +34,7 @@ class Select extends Base
      * Preloads the default selected columns.
      * 
      * @param string $select
+     * @return void
      */
     public function __construct($select = '*')
     {
@@ -48,8 +49,8 @@ class Select extends Base
      */
     public function select($select = '*')
     {
-        Argument::i()
-                ->test(1, 'string', 'array'); // argument 1 must be a string or array
+        Argument::i()->test(1, 'string', 'array');
+        
         //if select is an array
         if (is_array($select)) {
             //transform into a string
@@ -69,8 +70,7 @@ class Select extends Base
      */
     public function from($from)
     {
-        Argument::i()
-                ->test(1, 'string'); // argument 1 must be a string
+        Argument::i()->test(1, 'string');
 
         $this->from = $from;
 
@@ -85,9 +85,7 @@ class Select extends Base
      */
     public function where($where)
     {
-        // argument 1 must be a string or array
-        Argument::i()
-                ->test(1, 'string', 'array');
+        Argument::i()->test(1, 'string', 'array');
 
         if (is_string($where)) {
             $where = array($where);
@@ -108,8 +106,8 @@ class Select extends Base
     public function sortBy($field, $order = 'ASC')
     {
         Argument::i()
-                ->test(1, 'string') // argument 1 must be a string
-                ->test(2, 'string'); // argument 2 must be a string
+                ->test(1, 'string')
+                ->test(2, 'string');
 
         $this->sortBy[] = $field . ' ' . $order;
 
@@ -126,8 +124,8 @@ class Select extends Base
     public function limit($page, $length)
     {
         Argument::i()
-                ->test(1, 'numeric') // argument 1 must be a number
-                ->test(2, 'numeric'); // argument 2 must be a number
+                ->test(1, 'numeric')
+                ->test(2, 'numeric');
 
         $this->page = $page;
         $this->length = $length;

@@ -30,11 +30,11 @@ class Graph extends Base
      * Preloads the token.
      *
      * @param string $token
+     * @return void
      */
     public function __construct($token)
     {
-        Argument::i()
-                ->test(1, 'string'); // argument 1 must be a string
+        Argument::i()->test(1, 'string');
 
         $this->token = $token;
     }
@@ -62,8 +62,8 @@ class Graph extends Base
     public function delete($id, $connection = null)
     {
         Argument::i()
-                ->test(1, 'string') // argument 1 must be a string
-                ->test(2, 'string', 'null'); // argument 2 must be a string or null
+                ->test(1, 'string')
+                ->test(2, 'string', 'null');
 
         $url = self::GRAPH_URL . '/' . $id;
 
@@ -85,10 +85,10 @@ class Graph extends Base
      */
     public function getFields($id = 'me', $fields)
     {
-        // argument test
         Argument::i()
-                ->test(1, 'string', 'int') // argument 1 must be a string or int
-                ->test(2, 'string', 'array'); // argument 2 must be a string or array
+                ->test(1, 'string', 'int')
+                ->test(2, 'string', 'array');
+        
         // if fields is an array
         if (is_array($fields)) {
             //make it into a string
@@ -111,10 +111,11 @@ class Graph extends Base
     public function getObject($id = 'me', $connection = null, array $query = array(), $auth = true)
     {
         Argument::i()
-                ->test(1, 'string', 'int') // argument 1 must be a string or int
-                ->test(2, 'string', 'null') // argument 2 must be a string or null
-                ->test(3, 'array') // argument 3 must be an array
-                ->test(4, 'bool'); // argument 4 must be a boolean
+                ->test(1, 'string', 'int')
+                ->test(2, 'string', 'null')
+                ->test(3, 'array')
+                ->test(4, 'bool');
+        
         // if we have a connection
         if ($connection) {
             //prepend a slash

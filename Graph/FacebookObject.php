@@ -32,13 +32,14 @@ class FacebookObject extends Base
      * @param string $type
      * @param array  $objects
      * @param scalar $args
+     * @return void
      */
     public function __construct($token, $type, $objects, $args)
     {
         Argument::i()
-                ->test(1, 'string') // argument 1 must be a string
-                ->test(2, 'string') // argument 2 must be a string
-                ->test(3, 'array'); // argument 2 must be a string
+                ->test(1, 'string')
+                ->test(2, 'string')
+                ->test(3, 'array');
 
         $this->myObjects = $objects;
 
@@ -149,8 +150,7 @@ class FacebookObject extends Base
     protected function checkArgument($arg, $type, $name, $argNo, $message = null)
     {
         try {
-            Argument::i()
-                    ->test(1, $type); // just check the argument type
+            Argument::i()->test(1, $type); // just check the argument type
         } catch (CoreException $exc) {
             Exception::i()
                     ->setMessage($message ? $message :

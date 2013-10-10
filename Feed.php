@@ -31,11 +31,11 @@ class Feed extends Base
      * Sets the id of the page.
      *
      * @param int $id
+     * @return void
      */
     public function __construct($id)
     {
-        Argument::i()
-                ->test(1, 'number'); // argument 1 must be a number
+        Argument::i()->test(1, 'number');
 
         $this->id = $id;
     }
