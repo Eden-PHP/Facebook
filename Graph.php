@@ -48,6 +48,8 @@ class Graph extends Base
      */
     public function __call($name, $args)
     {
+        Argument::i()->test(1, 'string');
+        
         return GraphBase::i($this->token)
                         ->__call($name, $args);
     }
@@ -55,9 +57,9 @@ class Graph extends Base
     /**
      * Deletes an object based on id.
      *
-     * @param string $id         id of the object
-     * @param string $connection [optional] the connection
-     * @return array|bool
+     * @param string      $id         id of the object
+     * @param string|null $connection [optional] the connection
+     * @return array
      */
     public function delete($id, $connection = null)
     {
@@ -83,7 +85,7 @@ class Graph extends Base
      * @param string|array $fields
      * @return array
      */
-    public function getFields($id = 'me', $fields)
+    public function getFields($id = 'me', $fields = array())
     {
         Argument::i()
                 ->test(1, 'string', 'int')
@@ -102,10 +104,10 @@ class Graph extends Base
     /**
      * Returns the detail of any object.
      *
-     * @param string|int $id         [optional] (defaul: me) id of the object
-     * @param string     $connection [optional] the page name
-     * @param array      $query      [optional] the query
-     * @param bool       $auth       [optional] (default: true) required auth
+     * @param string|int  $id         [optional] (defaul: me) id of the object
+     * @param string|null $connection [optional] the page name
+     * @param array       $query      [optional] the query
+     * @param bool        $auth       [optional] (default: true) required auth
      * @return array json object
      */
     public function getObject($id = 'me', $connection = null, array $query = array(), $auth = true)

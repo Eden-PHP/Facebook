@@ -54,12 +54,12 @@ class Fql extends Base
     /**
      * Gets the result of the query and parse it to collection/model.
      * 
-     * @param string       $table
-     * @param string|array $filters [optional]
-     * @param array        $sort
-     * @param int          $start
-     * @param int          $range
-     * @param int          $index [optional]
+     * @param string            $table
+     * @param string|array|null $filters [optional]
+     * @param array             $sort
+     * @param int|float         $start
+     * @param int|float         $range
+     * @param int|float|null    $index   [optional]
      * @return \Eden\Model\Base|\Eden\Collection\Base
      */
     public function getCollection(
@@ -74,9 +74,9 @@ class Fql extends Base
                 ->test(1, 'string')
                 ->test(2, 'string', 'array', 'null')
                 ->test(3, 'array')
-                ->test(4, 'int')
-                ->test(5, 'int')
-                ->test(6, 'int', 'null');
+                ->test(4, 'int', 'float')
+                ->test(5, 'int', 'float')
+                ->test(6, 'int', 'float', 'null');
 
         $results = $this->getRows($table, $filters, $sort, $start, $range, $index);
 
@@ -144,19 +144,19 @@ class Fql extends Base
 
         $results = $this->query($query);
 
-        return isset($results[0]) ? $results[0] : null;
+        return isset($results[0]) ? $results[0] : array();
     }
 
     /**
      * Gets the results of the query.
      * 
-     * @param string       $table
-     * @param string|array $filters [optional]
-     * @param int|float    $sort
-     * @param int|float    $start
-     * @param int|float    $range
-     * @param int|float    $index   [optional]
-     * @return array returns null if the results is empty
+     * @param string            $table
+     * @param string|array|null $filters [optional]
+     * @param array             $sort
+     * @param int|float         $start
+     * @param int|float         $range
+     * @param int|float|null    $index   [optional]
+     * @return array|null
      */
     public function getRows(
             $table,
@@ -250,8 +250,8 @@ class Fql extends Base
     /**
      * Gets the total count of the query.
      * 
-     * @param string       $table
-     * @param string|array $filters [optional]
+     * @param string            $table
+     * @param string|array|null $filters [optional]
      * @return int
      */
     public function getRowsCount($table, $filters = null)
@@ -298,11 +298,13 @@ class Fql extends Base
     /**
      * Gets the fql queries.
      * 
-     * @param string|int $index [optional]
+     * @param string|int|null $index [optional]
      * @return array
      */
     public function getQueries($index = null)
     {
+        Argument::i()->test(1, 'string', 'int', 'null');
+        
         if (is_null($index)) {
             return $this->queries;
         }
