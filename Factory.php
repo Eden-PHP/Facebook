@@ -33,8 +33,8 @@ class Factory extends Base
     public function auth($key, $secret, $redirect)
     {
         Argument::i()
-                ->test(1, 'number') // argument 1 must be a number
-                ->test(2, 'alphanum') // argument 2 must be a alphanum
+                ->test(1, 'string') // argument 1 must be a string
+                ->test(2, 'string') // argument 2 must be a string
                 ->test(3, 'url'); // argument 3 must be a url
 
         return Auth::i($key, $secret, $redirect);

@@ -29,15 +29,15 @@ class Auth extends Client
     /**
      * Sets the application's key, secret and redirect uri.
      *
-     * @param number $key      the application's key
+     * @param string $key      the application's key
      * @param string $secret   the application's secret
      * @param string $redirect the application's redirect uri
      */
     public function __construct($key, $secret, $redirect)
     {
         Argument::i()
-                ->test(1, 'number') // argument 1 must be a number
-                ->test(2, 'alphanum') // argument 2 must be a alphanum
+                ->test(1, 'string') // argument 1 must be a number
+                ->test(2, 'string') // argument 2 must be a alphanum
                 ->test(3, 'url'); // argument 3 must be a url
 
         parent::__construct($key, $secret, $redirect, self::REQUEST_URL, self::ACCESS_URL);
