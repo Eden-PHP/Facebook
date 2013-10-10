@@ -26,7 +26,7 @@ use Eden\Curl\Base as Curl;
  */
 class Base extends CoreBase
 {
-    const INSTANCE = 1; // set to multiton
+    const INSTANCE = 0; // set to multiton
     const DEBUG_URL = 'https://graph.facebook.com/debug_token';
 
     /**
