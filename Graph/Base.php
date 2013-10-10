@@ -30,6 +30,26 @@ class Base extends FacebookBase
     protected $post = array();
     protected $token;
     protected $type;
+    
+    /**
+     * Calls the facebook object if the name exists.
+     *
+     * @param string $name name of the facebook object
+     * @param array $args the contructor arguments
+     * @return \Eden\Facebook\Graph\FacebookObject|null
+     */
+    public function __call($name, array $args = array())
+    {
+        Argument::i()
+                ->test(1, 'string')
+                ->test(2, 'array');
+        
+        if (isset($this->_objects[$name])) {
+            return FacebookObject::i($this->token, $name, $this->_objects[$name], $args);
+        }
+        
+        return null;
+    }
 
     /**
      * Preloads the token of the graph.
@@ -85,26 +105,6 @@ class Base extends FacebookBase
                 ->getJsonResponse(); // get the json response
 
         return $response;
-    }
-
-    /**
-     * Calls the facebook object if the name exists.
-     *
-     * @param string $name name of the facebook object
-     * @param array $args the contructor arguments
-     * @return \Eden\Facebook\Graph\FacebookObject|null
-     */
-    public function __call($name, array $args = array())
-    {
-        Argument::i()
-                ->test(1, 'string')
-                ->test(2, 'array');
-        
-        if (isset($this->_objects[$name])) {
-            return FacebookObject::i($this->token, $name, $this->_objects[$name], $args);
-        }
-        
-        return null;
     }
 
     /**
