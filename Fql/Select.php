@@ -1,6 +1,4 @@
-<?php
-
-//-->
+<?php //-->
 /*
  * This file is part of the Eden package.
  * (c) 2011-2012 Openovate Labs
@@ -32,6 +30,11 @@ class Select extends Base
     protected $page = null;
     protected $length = null;
 
+    /**
+     * Preloads the default selected columns.
+     * 
+     * @param string $select
+     */
     public function __construct($select = '*')
     {
         $this->select($select);
@@ -40,8 +43,8 @@ class Select extends Base
     /**
      * Select clause.
      *
-     * @param string|array select field (default: *)
-     * @return this
+     * @param string|array $select [optional] (default: *)
+     * @return \Eden\Facebook\Fql\Select
      */
     public function select($select = '*')
     {
@@ -59,10 +62,10 @@ class Select extends Base
     }
 
     /**
-     * From clause
+     * From clause.
      *
-     * @param string from
-     * @return this
+     * @param string $from
+     * @return \Eden\Facebook\Fql\Select
      */
     public function from($from)
     {
@@ -75,9 +78,9 @@ class Select extends Base
     }
 
     /**
-     * Where clause
+     * Where clause.
      *
-     * @param array|string where
+     * @param array|string $where
      * @return Eden\Facebook\Fql\Select
      */
     public function where($where)
@@ -96,11 +99,11 @@ class Select extends Base
     }
 
     /**
-     * Order by clause
+     * Order by clause.
      *
-     * @param string field the field to be sorted
-     * @param string order order type (ASC = Ascending, DESC = Descending)
-     * @return this
+     * @param string $field the field to be sorted
+     * @param string $order order type (ASC = Ascending, DESC = Descending)
+     * @return \Eden\Facebook\Fql\Select
      */
     public function sortBy($field, $order = 'ASC')
     {
@@ -118,7 +121,7 @@ class Select extends Base
      *
      * @param numeric page page number
      * @param numeric length length
-     * @return this
+     * @return \Eden\Facebook\Fql\Select
      */
     public function limit($page, $length)
     {
@@ -133,7 +136,7 @@ class Select extends Base
     }
 
     /**
-     * Returns the string version of the query .
+     * Returns the string version of the query.
      *
      * @return string the query
      */
@@ -1319,5 +1322,4 @@ class Select extends Base
             'subject',
             'updated_time',
             'vid'));
-
 }

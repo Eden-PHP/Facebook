@@ -1,6 +1,4 @@
-<?php
-
-//-->
+<?php //-->
 /*
  * This file is part of the Eden package.
  * (c) 2011-2012 Openovate Labs
@@ -31,9 +29,9 @@ class Auth extends Client
     /**
      * Sets the application's key, secret and redirect uri.
      *
-     * @param number   $key      the application's key
-     * @param alphanum $secret   the application's secret
-     * @param url      $redirect the application's redirect uri
+     * @param number $key      the application's key
+     * @param string $secret   the application's secret
+     * @param string $redirect the application's redirect uri
      */
     public function __construct($key, $secret, $redirect)
     {
@@ -44,5 +42,4 @@ class Auth extends Client
 
         parent::__construct($key, $secret, $redirect, self::REQUEST_URL, self::ACCESS_URL);
     }
-
 }

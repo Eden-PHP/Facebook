@@ -1,6 +1,4 @@
-<?php
-
-//-->
+<?php //-->
 /*
  * This file is part of the Utility package of the Eden PHP Library.
  * (c) 2013-2014 Openovate Labs
@@ -27,5 +25,4 @@ use Eden\Core\Argument as CoreArgument;
  */
 class Argument extends CoreArgument
 {
-
 }

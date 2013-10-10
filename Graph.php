@@ -1,6 +1,4 @@
-<?php
-
-//-->
+<?php //-->
 /*
  * This file is part of the Eden package.
  * (c) 2011-2012 Openovate Labs
@@ -23,15 +21,15 @@ use Eden\Facebook\Graph\Base as GraphBase;
  */
 class Graph extends Base
 {
-    const INSTANCE = 0;
+    const INSTANCE = 0; // sets to multiton
     const GRAPH_URL = 'https://graph.facebook.com/';
 
     protected $token = null;
 
     /**
-     * Preloads the token
+     * Preloads the token.
      *
-     * @param string
+     * @param string $token
      */
     public function __construct($token)
     {
@@ -45,9 +43,8 @@ class Graph extends Base
      * Returns the facebook object.
      *
      * @param string $name name of the facebook object
-     * @param scalar $args the constructor args
-     *
-     * @return this
+     * @param scalar $args the constructor arguments
+     * @return \Eden\Facebook\Graph\Base
      */
     public function __call($name, $args)
     {
@@ -60,13 +57,13 @@ class Graph extends Base
      *
      * @param string $id         id of the object
      * @param string $connection [optional] the connection
-     *
      * @return array|bool
      */
     public function delete($id, $connection = null)
     {
         Argument::i()
-                ->test(1, 'string'); // argument 1 must be a string
+                ->test(1, 'string') // argument 1 must be a string
+                ->test(2, 'string', 'null'); // argument 2 must be a string or null
 
         $url = self::GRAPH_URL . '/' . $id;
 
@@ -80,36 +77,35 @@ class Graph extends Base
     }
 
     /**
-     * Returns specific fields of an object
+     * Returns specific fields of an object.
      *
-     * @param string|int
-     * @param string|array
+     * @param string|int   $id     [optional]
+     * @param string|array $fields
      * @return array
      */
     public function getFields($id = 'me', $fields)
     {
-        //Argument test
+        // argument test
         Argument::i()
                 ->test(1, 'string', 'int') // argument 1 must be a string or int
                 ->test(2, 'string', 'array'); // argument 2 must be a string or array
-        //if fields is an array
+        // if fields is an array
         if (is_array($fields)) {
             //make it into a string
             $fields = implode(',', $fields);
         }
 
-        //call it
+        // call it
         return $this->getObject($id, null, array('fields' => $fields));
     }
 
     /**
      * Returns the detail of any object.
      *
-     * @param string|int [defaul: me] id of the object
-     * @param string|null [optional] the page name
-     * @param array [optional] the query
-     * @param bool [default: true] required auth
-     *
+     * @param string|int $id         [optional] (defaul: me) id of the object
+     * @param string     $connection [optional] the page name
+     * @param array      $query      [optional] the query
+     * @param bool       $auth       [optional] (default: true) required auth
      * @return array json object
      */
     public function getObject($id = 'me', $connection = null, array $query = array(), $auth = true)
@@ -149,11 +145,10 @@ class Graph extends Base
     /**
      * Get response using curl.
      *
-     * @param url    $url     graph url
+     * @param string $url     graph url
      * @param array  $post    post fields
      * @param string $request the request method
-     *
-     * @return array jsonobject
+     * @return array
      */
     protected function getResponse($url, array $post = array(), $request = Curl::GET)
     {
@@ -188,5 +183,4 @@ class Graph extends Base
 
         return $response;
     }
-
 }

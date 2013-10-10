@@ -1,6 +1,4 @@
-<?php
-
-//-->
+<?php //-->
 /*
  * This file is part of the Eden package.
  * (c) 2011-2012 Openovate Labs
@@ -23,15 +21,17 @@ use Eden\Facebook\Argument;
  */
 class FacebookObject extends Base
 {
-    const INSTANCE = 0;
+    const INSTANCE = 0; // sets to multiton
 
     protected $myObjects = null;
 
     /**
-     * Preloads the token and post.
-     *
-     * @param sttring $token access token
-     * @param string  $name  name of the album
+     * Preloads the token, type and the arguments.
+     * 
+     * @param string $token
+     * @param string $type
+     * @param array  $objects
+     * @param scalar $args
      */
     public function __construct($token, $type, $objects, $args)
     {
@@ -51,9 +51,10 @@ class FacebookObject extends Base
     /**
      * Dynamically sets the values based on the object needs.
      *
-     * @param  string $name name of the method
-     * @param  array  $args arguments
-     * @return this
+     * @param string $name name of the method
+     * @param array  $args arguments
+     * @return \Eden\Facebook\Graph\FacebookObject
+     * @throws \Eden\Facebook\Graph\Exception
      */
     public function __call($name, $args)
     {
@@ -101,9 +102,9 @@ class FacebookObject extends Base
     }
 
     /**
-     * Create a facebook object
+     * Create a facebook object.
      *
-     * @return array jsonobject
+     * @return array
      */
     public function create()
     {
@@ -165,7 +166,7 @@ class FacebookObject extends Base
      *
      * @param array $args the arguments to be encoded
      *
-     * @return this
+     * @return \Eden\Facebook\Graph\FacebookObject
      */
     protected function validatePrivacy($args)
     {
@@ -198,5 +199,4 @@ class FacebookObject extends Base
 
         return $this;
     }
-
 }

@@ -1,6 +1,4 @@
-<?php
-
-// -->
+<?php // -->
 /*
  * This file is part of the Eden package.
  * (c) 2011-2012 Openovate Labs
@@ -41,7 +39,7 @@ class Search extends FacebookBase
     protected $groups = array();
 
     /**
-     * Preload the database
+     * Preload the database.
      *
      * @param Fql $database the fql instance
      */
@@ -55,8 +53,8 @@ class Search extends FacebookBase
      *
      * @param string $name
      * @param scalar $args
-     *
-     * @return mixed
+     * @return \Eden\Facebook\Fql\Search
+     * @throws \Eden\Facebook\Fql\Exception
      */
     public function __call($name, $args)
     {
@@ -128,7 +126,7 @@ class Search extends FacebookBase
      *
      * @param string
      * @param string[,string..]
-     * @return this
+     * @return \Eden\Facebook\Fql\Search
      */
     public function addFilter()
     {
@@ -143,9 +141,9 @@ class Search extends FacebookBase
     /**
      * Adds sort.
      *
-     * @param string
-     * @param string
-     * @return this
+     * @param string $column
+     * @param string $order  [optional] (default: ASC)
+     * @return \Eden\Facebook\Fql\Search
      */
     public function addSort($column, $order = self::ASC)
     {
@@ -165,8 +163,8 @@ class Search extends FacebookBase
     /**
      * Returns the results in a collection.
      *
-     * @param string
-     * @return Collection
+     * @param string 
+     * @return array
      */
     public function getCollection($key = 'last')
     {
@@ -189,7 +187,7 @@ class Search extends FacebookBase
     /**
      * Returns the array rows.
      *
-     * @param string
+     * @param string $key [optional] (default: last)
      * @return array
      */
     public function getRows($key = 'last')
@@ -268,11 +266,10 @@ class Search extends FacebookBase
     }
 
     /**
-     * Stores this search and resets class.
-     * Useful for multiple queries.
+     * Stores this search and resets class. Useful for multiple queries.
      *
-     * @param scalar
-     * @return this
+     * @param string $key
+     * @return \Eden\Facebook\Fql\Search
      */
     public function group($key)
     {
@@ -308,8 +305,8 @@ class Search extends FacebookBase
     /**
      * Sets Columns.
      *
-     * @param string[,string..]|array
-     * @return this
+     * @param string[,string..]|array $columns
+     * @return \Eden\Facebook\Fql\Search
      */
     public function setColumns($columns)
     {
@@ -327,8 +324,8 @@ class Search extends FacebookBase
     /**
      * Sets the pagination page.
      *
-     * @param int
-     * @return this
+     * @param int $page
+     * @return \Eden\Facebook\Fql\Search
      */
     public function setPage($page)
     {
@@ -347,8 +344,8 @@ class Search extends FacebookBase
     /**
      * Sets the pagination range.
      *
-     * @param int
-     * @return this
+     * @param int $range
+     * @return \Eden\Facebook\Fql\Search
      */
     public function setRange($range)
     {
@@ -367,8 +364,8 @@ class Search extends FacebookBase
     /**
      * Sets the pagination start.
      *
-     * @param int
-     * @return this
+     * @param int $start
+     * @return \Eden\Facebook\Fql\Search
      */
     public function setStart($start)
     {
@@ -387,8 +384,8 @@ class Search extends FacebookBase
     /**
      * Sets Table.
      *
-     * @param string
-     * @return this
+     * @param string $table
+     * @return \Eden\Facebook\Fql\Search
      */
     public function setTable($table)
     {
@@ -402,7 +399,7 @@ class Search extends FacebookBase
     /**
      * Returns the complete select statement.
      *
-     * @return this
+     * @return \Eden\Facebook\Fql\Search
      */
     protected function getQuery()
     {
@@ -431,5 +428,4 @@ class Search extends FacebookBase
 
         return $query;
     }
-
 }

@@ -1,6 +1,4 @@
-<?php
-
-// -->
+<?php // -->
 /*
  * This file is part of the Eden package.
  * (c) 2011-2012 Openovate Labs
@@ -33,21 +31,44 @@ use Eden\Model\Base as Model;
  */
 class Fql extends Base
 {
-    const INSTANCE = 0;
+    const INSTANCE = 0; // set to multiton
     const SELECT = 'Select';
     const FQL_URL = 'https://graph.facebook.com/fql';
+    const FIRST = 'first';
+    const LAST = 'last';
 
     protected $queries = array();
     protected $token = null;
 
+    /**
+     * Preloads the access token.
+     * 
+     * @param string $token
+     */
     public function __construct($token)
     {
         $this->token = $token;
     }
 
+    /**
+     * Gets the result of the query and parse it to collection/model.
+     * 
+     * @param string       $table
+     * @param string|array $filters [optional]
+     * @param array        $sort
+     * @param int          $start
+     * @param int          $range
+     * @param int          $index [optional]
+     * @return \Eden\Model\Base|\Eden\Collection\Base
+     */
     public function getCollection(
-    $table, $filters = null, array $sort = array(), $start = 0, $range = 0, $index = null)
-    {
+            $table, 
+            $filters = null, 
+            array $sort = array(), 
+            $start = 0,
+            $range = 0, 
+            $index = null
+    ) {
         Argument::i()
                 ->test(1, 'string') // argument 1 must be a string
                 ->test(2, 'string', 'array', 'null') // argument 2 must be a string numeric or null
@@ -59,17 +80,27 @@ class Fql extends Base
 
         $collection = Collection::i();
 
+        // checks if results is null
         if (is_null($results)) {
-            return $collection;
+            return $collection; // return empty collection
         }
 
+        // checks if index is not null
         if (!is_null($index)) {
-            return $this->model($results);
+            return $this->model($results); // return model with results
         }
 
-        return $collection->set($results);
+        return $collection->set($results); // return collection with results
     }
 
+    /**
+     * Gets a model from the result.
+     * 
+     * @param string        $table
+     * @param string        $name
+     * @param string|number $value
+     * @return \Eden\Model\Base
+     */
     public function getModel($table, $name, $value)
     {
         Argument::i()
@@ -88,6 +119,14 @@ class Fql extends Base
         return $model->set($result);
     }
 
+    /**
+     * Gets a single result of the query.
+     * 
+     * @param string        $table
+     * @param string        $name
+     * @param string|number $value
+     * @return array
+     */
     public function getRow($table, $name, $value)
     {
         Argument::i()
@@ -95,6 +134,7 @@ class Fql extends Base
                 ->test(2, 'string') // argument 2 must be a string
                 ->test(3, 'string', 'numeric'); // argument 3 must be a string or numeric
 
+        // select query
         $query = $this->select()
                 ->from($table)
                 ->where($name . ' = ' . $value)
@@ -105,9 +145,25 @@ class Fql extends Base
         return isset($results[0]) ? $results[0] : null;
     }
 
+    /**
+     * Gets the results of the query.
+     * 
+     * @param string       $table
+     * @param string|array $filters [optional]
+     * @param number       $sort
+     * @param number       $start
+     * @param number       $range
+     * @param number       $index   [optional]
+     * @return array returns null if the results is empty
+     */
     public function getRows(
-    $table, $filters = null, array $sort = array(), $start = 0, $range = 0, $index = null)
-    {
+            $table,
+            $filters = null, 
+            array $sort = array(), 
+            $start = 0, 
+            $range = 0, 
+            $index = null
+    ) {
         Argument::i()
                 ->test(1, 'string') // argument 1 must be a string
                 ->test(2, 'string', 'array', 'null') // argument 2 must be a string numeric or null
@@ -188,6 +244,13 @@ class Fql extends Base
         return $results;
     }
 
+    /**
+     * Gets the total count of the query.
+     * 
+     * @param string       $table
+     * @param string|array $filters [optional]
+     * @return int
+     */
     public function getRowsCount($table, $filters = null)
     {
         Argument::i()
@@ -229,6 +292,12 @@ class Fql extends Base
         return 0;
     }
 
+    /**
+     * Gets the fql queries.
+     * 
+     * @param string|int $index [optional]
+     * @return array
+     */
     public function getQueries($index = null)
     {
         if (is_null($index)) {
@@ -236,13 +305,14 @@ class Fql extends Base
         }
 
         if ($index == self::FIRST) {
-            $index = 0;
+            $index = 0; // gets the first query
         }
 
         if ($index == self::LAST) {
-            $index = count($this->queries) - 1;
+            $index = count($this->queries) - 1; // gets the last query
         }
 
+        // if the query index exists
         if (isset($this->queries[$index])) {
             return $this->queries[$index];
         }
@@ -250,6 +320,13 @@ class Fql extends Base
         return null;
     }
 
+    /**
+     * Gets the response with specified query.
+     * 
+     * @param string|array $query
+     * @return array
+     * @throws \Eden\Facebook\Exception if response message is error
+     */
     public function query($query)
     {
         Argument::i()->test(1, 'string', 'array', self::SELECT); // argument 1 must be a string or array
@@ -297,6 +374,11 @@ class Fql extends Base
         return $results['data'];
     }
 
+    /**
+     * Returns a new instance of Search class.
+     * 
+     * @return \Eden\Facebook\Fql\Search
+     */
     public function search()
     {
         return Search::i($this);
@@ -305,8 +387,8 @@ class Fql extends Base
     /**
      * Returns a new instance of Select class.
      *
-     * @param  string|array $select columns to be selected (Default: *)
-     * @return Select
+     * @param string|array $select columns to be selected (Default: *)
+     * @return \Eden\Facebook\Fql\Select
      */
     public function select($select = '*')
     {
@@ -315,5 +397,4 @@ class Fql extends Base
 
         return Select::i($select);
     }
-
 }

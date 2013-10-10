@@ -1,6 +1,4 @@
-<?php
-
-//-->
+<?php //-->
 /*
  * This file is part of the Eden package.
  * (c) 2011-2012 Openovate Labs
@@ -27,10 +25,10 @@ class Factory extends Base
     /**
      * Returns the instance of Auth
      *
-     * @param  string $key      the key of the application
-     * @param  string $secret   the secret of the application
-     * @param  string $redirect the redirect url of the page
-     * @return Auth
+     * @param string $key      the key of the application
+     * @param string $secret   the secret of the application
+     * @param string $redirect the redirect url of the page
+     * @return \Eden\Facebook\Auth
      */
     public function auth($key, $secret, $redirect)
     {
@@ -45,8 +43,8 @@ class Factory extends Base
     /**
      * Returns the instance of feed
      *
-     * @param  string $id the id of the page
-     * @return Feed
+     * @param string $id the id of the page
+     * @return \Eden\Facebook\Feed
      */
     public function feed($id)
     {
@@ -59,8 +57,8 @@ class Factory extends Base
     /**
      * Returns the instance of graph.
      *
-     * @param  string $token access token
-     * @return Graph
+     * @param string $token access token
+     * @return \Eden\Facebook\Graph
      */
     public function graph($token)
     {
@@ -73,8 +71,8 @@ class Factory extends Base
     /**
      * Returns the instance of fql.
      *
-     * @param  string $token access token
-     * @return Graph
+     * @param string $token access token
+     * @return \Eden\Facebook\Fql
      */
     public function fql($token)
     {
@@ -83,5 +81,4 @@ class Factory extends Base
 
         return Fql::i($token);
     }
-
 }

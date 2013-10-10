@@ -1,6 +1,4 @@
-<?php
-
-//-->
+<?php //-->
 /*
  * This file is part of the Utility package of the Eden PHP Library.
  * (c) 2013-2014 Openovate Labs
@@ -46,8 +44,8 @@ class Base extends FacebookBase
     /**
      * Sets the id of the object.
      *
-     * @param  string $id id of the facebook object
-     * @return this
+     * @param string $id id of the facebook object
+     * @return \Eden\Facebook\Graph\Base
      */
     public function setId($id)
     {
@@ -59,7 +57,7 @@ class Base extends FacebookBase
     /**
      * Returns the json response of the request.
      *
-     * @return array json object
+     * @return array
      */
     protected function getResponse()
     {
@@ -90,7 +88,7 @@ class Base extends FacebookBase
      * @param string $name name of the facebook object
      * @param scalar $args the contructor arguments
      *
-     * @return this
+     * @return \Eden\Facebook\Graph\FacebookObject
      */
     public function __call($name, $args)
     {
@@ -421,5 +419,4 @@ class Base extends FacebookBase
             )
         )
     );
-
 }

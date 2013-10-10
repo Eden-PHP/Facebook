@@ -1,6 +1,4 @@
-<?php
-
-//-->
+<?php //-->
 /*
  * This file is part of the Utility package of the Eden PHP Library.
  * (c) 2013-2014 Openovate Labs
@@ -25,8 +23,7 @@ class Feed extends Base
     const RSS_FORMAT = 'rss20';
     const JSON_FORMAT = 'json';
     const FEED_URL = 'https://www.facebook.com/feeds/page.php?id=%s&format=%s';
-    const USER_AGENT = 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.2.13)
-        Gecko/20101206 Ubuntu/10.10 (maverick) Firefox/3.6.13';
+    const USER_AGENT = 'facebook-php-eden';
 
     protected $id = null;
 
@@ -44,9 +41,9 @@ class Feed extends Base
     }
 
     /**
-     * Returns the SimpleXML Formal feed of the page.
+     * Returns the SimpleXML Format feed of the page.
      *
-     * @return SimpleXml the feed of the page on xml format
+     * @return \SimpleXMLElement the feed of the page on xml format
      */
     public function getRss()
     {
@@ -80,5 +77,4 @@ class Feed extends Base
 
         return $results;
     }
-
 }
