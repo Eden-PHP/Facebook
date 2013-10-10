@@ -38,8 +38,8 @@ class Base extends CoreBase
     public function debugToken($inputToken, $appToken)
     {
         Argument::i()
-                ->test(1, 'alphanum') // argument 1 must be a alphanum
-                ->test(2, 'alphanum'); // argument 2 must be a alphanum
+                ->test(1, 'string') // argument 1 must be a string
+                ->test(2, 'string'); // argument 2 must be a string
 
         $query = array(
             'input_token' => $inputToken,
