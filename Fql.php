@@ -73,6 +73,7 @@ class Fql extends Base
         Argument::i()
                 ->test(1, 'string')
                 ->test(2, 'string', 'array', 'null')
+                ->test(3, 'array')
                 ->test(4, 'numeric')
                 ->test(5, 'numeric')
                 ->test(6, 'numeric', 'null');
@@ -168,6 +169,7 @@ class Fql extends Base
         Argument::i()
                 ->test(1, 'string')
                 ->test(2, 'string', 'array', 'null')
+                ->test(3, 'array')
                 ->test(4, 'numeric')
                 ->test(5, 'numeric')
                 ->test(6, 'numeric', 'null');
