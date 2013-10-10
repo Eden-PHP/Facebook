@@ -160,8 +160,14 @@ class SearchTest extends PHPUnit_Framework_TestCase
                 ->setTable('status')
                 ->addFilter('uid = me()')
                 ->getTotal();
-
-        $this->assertEquals(0, $object);
+        
+        $rows = $this->search
+                ->setColumns('COUNT(*)')
+                ->setTable('status')
+                ->addFilter('uid = me()')
+                ->getRows();
+        
+        $this->assertEquals(count($rows), $object);
     }
 
     /**
