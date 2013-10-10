@@ -33,6 +33,19 @@ class Base extends FacebookBase
     protected $type;
     
     /**
+     * Preloads the token of the graph.
+     *
+     * @param string $token
+     * @return void
+     */
+    public function __construct($token)
+    {
+        Argument::i()->test(1, 'string');
+        
+        $this->token = $token;
+    }
+    
+    /**
      * Calls the facebook object if the name exists.
      *
      * @param string $name name of the facebook object
@@ -50,19 +63,6 @@ class Base extends FacebookBase
         }
         
         return null;
-    }
-
-    /**
-     * Preloads the token of the graph.
-     *
-     * @param string $token
-     * @return void
-     */
-    public function __construct($token)
-    {
-        Argument::i()->test(1, 'string');
-        
-        $this->token = $token;
     }
 
     /**

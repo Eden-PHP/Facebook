@@ -26,6 +26,32 @@ class FacebookObject extends Base
     protected $myObjects = null;
 
     /**
+     * Preloads the token, type and the arguments.
+     * 
+     * @param string $token
+     * @param string $type
+     * @param array  $objects
+     * @param array  $args
+     * @return void
+     */
+    public function __construct($token, $type, $objects, array $args = array())
+    {
+        Argument::i()
+                ->test(1, 'string')
+                ->test(2, 'string')
+                ->test(3, 'array')
+                ->test(4, 'array');
+
+        $this->myObjects = $objects;
+
+        $this->type = $type;
+        parent::__construct($token); // call the parent
+        
+        // validate the required arguments
+        $this->validateArguments($args);
+    }
+    
+    /**
      * Dynamically sets the values based on the object needs.
      *
      * @param string $name name of the method
@@ -80,32 +106,6 @@ class FacebookObject extends Base
                         ->trigger();
             }
         }
-    }
-    
-    /**
-     * Preloads the token, type and the arguments.
-     * 
-     * @param string $token
-     * @param string $type
-     * @param array  $objects
-     * @param array  $args
-     * @return void
-     */
-    public function __construct($token, $type, $objects, array $args = array())
-    {
-        Argument::i()
-                ->test(1, 'string')
-                ->test(2, 'string')
-                ->test(3, 'array')
-                ->test(4, 'array');
-
-        $this->myObjects = $objects;
-
-        $this->type = $type;
-        parent::__construct($token); // call the parent
-        
-        // validate the required arguments
-        $this->validateArguments($args);
     }
 
     /**
