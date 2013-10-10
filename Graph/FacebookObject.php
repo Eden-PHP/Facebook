@@ -31,7 +31,7 @@ class FacebookObject extends Base
      * @param string $token
      * @param string $type
      * @param array  $objects
-     * @param array $args
+     * @param array  $args
      * @return void
      */
     public function __construct($token, $type, $objects, array $args = array())
