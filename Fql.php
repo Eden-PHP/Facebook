@@ -74,9 +74,9 @@ class Fql extends Base
                 ->test(1, 'string')
                 ->test(2, 'string', 'array', 'null')
                 ->test(3, 'array')
-                ->test(4, 'numeric')
-                ->test(5, 'numeric')
-                ->test(6, 'numeric', 'null');
+                ->test(4, 'int')
+                ->test(5, 'int')
+                ->test(6, 'int', 'null');
 
         $results = $this->getRows($table, $filters, $sort, $start, $range, $index);
 
@@ -98,9 +98,9 @@ class Fql extends Base
     /**
      * Gets a model from the result.
      * 
-     * @param string        $table
-     * @param string        $name
-     * @param string|number $value
+     * @param string           $table
+     * @param string           $name
+     * @param string|int|float $value
      * @return \Eden\Model\Base
      */
     public function getModel($table, $name, $value)
@@ -108,7 +108,7 @@ class Fql extends Base
         Argument::i()
                 ->test(1, 'string')
                 ->test(2, 'string')
-                ->test(3, 'string', 'numeric');
+                ->test(3, 'string', 'int', 'float');
 
         $result = $this->getRow($table, $name, $value);
 
@@ -124,9 +124,9 @@ class Fql extends Base
     /**
      * Gets a single result of the query.
      * 
-     * @param string        $table
-     * @param string        $name
-     * @param string|number $value
+     * @param string           $table
+     * @param string           $name
+     * @param string|int|float $value
      * @return array
      */
     public function getRow($table, $name, $value)
@@ -134,7 +134,7 @@ class Fql extends Base
         Argument::i()
                 ->test(1, 'string')
                 ->test(2, 'string')
-                ->test(3, 'string', 'numeric');
+                ->test(3, 'string', 'int', 'float');
 
         // select query
         $query = $this->select()
@@ -170,9 +170,9 @@ class Fql extends Base
                 ->test(1, 'string')
                 ->test(2, 'string', 'array', 'null')
                 ->test(3, 'array')
-                ->test(4, 'numeric')
-                ->test(5, 'numeric')
-                ->test(6, 'numeric', 'null');
+                ->test(4, 'int', 'float')
+                ->test(5, 'int', 'float')
+                ->test(6, 'int', 'float', 'null');
 
         $query = $this->select()->from($table);
 

@@ -117,15 +117,15 @@ class Select extends Base
     /**
      * Limit clause.
      *
-     * @param numeric page page number
-     * @param numeric length length
+     * @param int|float page page number
+     * @param int|float length length
      * @return \Eden\Facebook\Fql\Select
      */
     public function limit($page, $length)
     {
         Argument::i()
-                ->test(1, 'numeric')
-                ->test(2, 'numeric');
+                ->test(1, 'int', 'float')
+                ->test(2, 'int', 'float');
 
         $this->page = $page;
         $this->length = $length;
