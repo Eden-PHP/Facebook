@@ -1,7 +1,7 @@
-<?php // -->
+<?php //-->
 /*
  * This file is part of the Eden package.
- * (c) 2011-2012 Openovate Labs
+ * (c) 2013-2014 Openovate Labs
  *
  * Copyright and license information can be found at LICENSE.txt
  * distributed with this package.
