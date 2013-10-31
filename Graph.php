@@ -144,6 +144,47 @@ class Graph extends Base
 
         return $object;
     }
+    
+    /**
+     * Search over all public objects in the social graph
+     *
+     * @param string
+     * @param string
+     * @param boolean
+     * @return array
+     **/
+    public function search($query, $type, $auth = true)
+    {
+        Argument::i()
+            ->test(1, 'string')
+            ->test(2, 'string')
+            ->test(3, 'bool');
+
+        // fix query
+        $query = array(
+            'q'     => $query,
+            'type'  => $type);
+
+        // fix url, append the search word
+        $url = self::GRAPH_URL.'/search';
+
+        // if this requires authentication
+        if ($auth) {
+            // add the token
+            $query['access_token'] = $this->token;
+        }
+
+        // if we have a query
+        if (!empty($query)) {
+            //append it to the url
+            $url .= '?' . http_build_query($query);
+        }
+
+        // call it
+        $object = $this->getResponse($url, array());
+
+        return $object;
+    }
 
     /**
      * Get response using curl.
